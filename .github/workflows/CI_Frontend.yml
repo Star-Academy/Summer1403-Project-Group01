@@ -43,7 +43,7 @@ jobs:
 
   semantic-versioning:
     runs-on: ubuntu-latest
-    needs: Build & Test # Ensure this job runs after the build job
+    needs: build # Ensure this job runs after the build job
 
     steps:
       - name: Checkout code
