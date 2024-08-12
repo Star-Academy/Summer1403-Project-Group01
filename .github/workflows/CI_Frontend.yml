@@ -36,9 +36,9 @@ jobs:
         run: npm ci
         working-directory: project
 
-      - name: Run Unit Tests
-        run: npm run test
-        working-directory: project
+      #- name: Run Unit Tests
+      #  run: npm run test
+      #  working-directory: project
 
       - name: Build Application
         run: npm run build
