@@ -1,11 +1,5 @@
-export enum accessPoints {
-  systemRoot,
-  dataAdmin,
-  analyzer
-}
-
 export default interface User {
-  access: accessPoints;
+  role: "root" | "admin" | "analyzer";
   email: string;
   firstName: string;
   lastName: string;

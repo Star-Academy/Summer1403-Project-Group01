@@ -1,1 +1,39 @@
-<p>login works!</p>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form">
+  <h1 class="form-title">کد استار</h1>
+  <div class="form-identifier">
+    <ng-icon name="heroUser"></ng-icon>
+    <input
+      name="identifier"
+      type="text"
+      placeholder="نام کاربری یا ایمیل"
+      formControlName="identifier"
+    />
+  </div>
+  <div class="form-password">
+    <ng-icon name="heroLockClosed"></ng-icon>
+    <input
+      name="identifier"
+      type="text"
+      placeholder="رمز عبور"
+      formControlName="identifier"
+    />
+  </div>
+  <button class="form-button">
+    <ng-icon name="heroArrowLeftEndOnRectangle"></ng-icon>
+    ورود به کد استار
+  </button>
+</form>
+
+<svg class="rectangle-top-left" viewBox="0 0 139 145" xmlns="http://www.w3.org/2000/svg">
+  <rect x="-151" y="-145" width="290" height="290" rx="145" fill="#4F86C9"/>
+</svg>
+<svg class="circle-top-right" viewBox="0 0 44 51" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="19" r="31.5" stroke="black"/>
+</svg>
+<svg class="circle-bottom-left" viewBox="0 0 65 156" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="-13" cy="78" r="77.5" stroke="black"/>
+</svg>
+<svg class="rectangle-bottom-right" width="103" height="145" viewBox="0 0 103 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="290" height="290" rx="145" fill="#002B5B"/>
+</svg>
+

@@ -4,7 +4,7 @@ import {LoginComponent} from "./components/login/login.component";
 import {loggedInGuard} from "./guards/loggedIn/logged-in.guard";
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   {path: 'dashboard', component: DashboardComponent, canActivate: [loggedInGuard], data: { requiresAuth: true }},
   {path: 'login', component: LoginComponent, canActivate: [loggedInGuard], data: { requiresAuth: false }},
+  {path: '**', redirectTo: 'dashboard'}
 ];

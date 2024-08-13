@@ -11,7 +11,7 @@ export const loggedInGuard: CanActivateFn = (route: ActivatedRouteSnapshot, stat
   else if (user && !route.data['requiresAuth'])
     return false;
   else if (!user) {
-    router.navigate(['']);
+    router.navigate(['login']);
     return false;
   }
   return true;

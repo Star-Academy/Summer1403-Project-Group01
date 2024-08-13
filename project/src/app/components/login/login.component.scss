@@ -1,0 +1,55 @@
+@import '../../../variables';
+
+@layer components {
+  .rectangle-top-left {
+    @apply absolute top-0 left-0 w-[13.9rem] h-[14.5rem] fill-none
+  }
+  .circle-top-right {
+    @apply absolute top-0 right-0 w-[4.4rem] h-[5.1rem] fill-none
+  }
+  .circle-bottom-left {
+    @apply absolute top-[44.6rem] left-0 fill-none w-[6.5rem] h-[15.6rem]
+  }
+  .rectangle-bottom-right {
+    @apply absolute bottom-0 right-0 fill-none w-[10.3rem] h-[14.5rem]
+  }
+  .form {
+    @apply flex flex-col justify-start items-center gap-[1rem]
+  }
+  .form-title {
+    @apply mb-[4rem] text-[3rem] font-bold;
+    color: $primary-color;
+  }
+  .form-identifier {
+    @apply flex flex-row justify-start items-center w-[24rem] h-[2.7rem] border-b-[0.1rem] gap-[0.5rem] mt-[2rem];
+    color: $secondary-color;
+    border-bottom-color: $secondary-color;
+
+    input {
+      @apply flex-grow;
+
+      &::placeholder {
+        color: $primary-color;
+      }
+    }
+  }
+  .form-password {
+    @apply flex flex-row justify-start items-center w-[24rem] h-[2.7rem] border-b-[0.1rem] gap-[0.5rem] mt-[2rem];
+    color: $neutral-color;
+    border-bottom-color: $neutral-color;
+
+    input {
+      @apply flex-grow;
+
+      &::placeholder {
+        color: $neutral-color;
+      }
+    }
+  }
+  .form-button {
+    @apply flex flex-row gap-2 self-stretch justify-center rounded-full p-2 mt-[4rem];
+    background: $accent-color;
+    color: $bg-color;
+
+  }
+}
