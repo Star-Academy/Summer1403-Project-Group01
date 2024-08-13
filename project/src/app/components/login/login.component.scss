@@ -1,6 +1,12 @@
 @import '../../../variables';
 
 @layer components {
+  .mobile {
+    @apply w-[100%] h-[100%] block lg:hidden
+  }
+  .laptop {
+    @apply w-[100%] h-[100%] hidden lg:block
+  }
   .rectangle-top-left {
     @apply absolute top-0 left-0 w-[13.9rem] h-[14.5rem] fill-none
   }
@@ -51,5 +57,71 @@
     background: $accent-color;
     color: $bg-color;
 
+  }
+  .rectangle-top-left-lg {
+    @apply absolute top-0 left-0 w-[9.3rem] h-[25.6rem] fill-none;
+  }
+  .rectangle-top-lg {
+    @apply absolute w-[15.6rem] h-[5.2rem] fill-none left-[102.5rem] top-0;
+  }
+  .rectangle-bottom-right-lg {
+    @apply absolute w-[17.4rem] h-[14.5rem] fill-none bottom-0 right-0;
+  }
+  .rectangle-bottom-lg {
+    @apply absolute w-[29rem] h-[7.2rem] fill-none left-[17.6rem] bottom-0;
+  }
+  .container-lg {
+    @apply flex flex-row-reverse gap-0 w-[100rem] h-[50rem];
+  }
+  .svg-form-lg {
+    @apply w-[100%] h-[100%] fill-none basis-1/2 rounded-l-3xl;
+    background: $secondary-color;
+  }
+  .form-container-lg {
+    @apply basis-1/2 rounded-r-3xl flex flex-row justify-center items-center;
+    background-color: $primary-color;
+  }
+  .form-lg {
+    @apply flex flex-col justify-start items-center gap-[1rem];
+
+    ng-icon {
+      @apply w-[1.5rem] h-[1.5rem];
+    }
+
+    button {
+      @apply text-[1.5rem] items-center;
+    }
+  }
+  .form-title-lg {
+    @apply mb-[4rem] text-[4rem] font-bold;
+    color: $bg-color;
+  }
+  .form-identifier-lg {
+    @apply flex flex-row justify-start items-center w-[24rem] h-[2.7rem] border-b-[0.1rem] gap-[0.5rem] mt-[2rem];
+    color: $bg-color;
+    border-bottom-color: $bg-color;
+
+    input {
+      @apply flex-grow bg-transparent;
+
+      &::placeholder {
+        @apply text-[1.5rem];
+        color: $bg-color;
+      }
+    }
+  }
+  .form-password-lg {
+    @apply flex flex-row justify-start items-center w-[24rem] h-[2.7rem] border-b-[0.1rem] gap-[0.5rem] mt-[2rem];
+    color: $neutral-color;
+    border-bottom-color: $neutral-color;
+
+    input {
+      @apply flex-grow bg-transparent;
+
+      &::placeholder {
+        @apply text-[1.5rem];
+        color: $neutral-color;
+      }
+    }
   }
 }
