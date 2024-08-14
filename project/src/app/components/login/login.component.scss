@@ -9,18 +9,28 @@
   }
   .input-container {
     @apply flex flex-row justify-start items-center w-[24rem] h-[2.7rem] border-b-[0.1rem] gap-[0.5rem] mt-[2rem] relative;
+    color: $neutral-color;
+    border-bottom-color: $neutral-color;
+
+    &:focus-within {
+      color: $bg-color;
+      border-bottom-color: $bg-color;
+    }
 
     input {
       @apply flex-grow bg-transparent text-[1.5rem];
 
+
       &:focus {
         @apply outline-none border-none;
+        color: $bg-color;
+        border-bottom-color: $bg-color;
       }
     }
 
     label {
       @apply absolute text-[1.5rem] transition-all duration-300 ease-in-out;
-      color: $neutral-color;
+      color: inherit;
       inset-inline-start: 2rem;
       inset-block-end: 0.3rem;
     }
@@ -53,8 +63,11 @@
   }
   .form-identifier {
     @apply input-container;
-    color: $secondary-color;
-    border-bottom-color: $secondary-color;
+
+    &:focus-within {
+      color: $secondary-color;
+      border-bottom-color: $secondary-color;
+    }
 
     input {
       @apply flex-grow;
@@ -62,16 +75,15 @@
       &::placeholder {
         color: $bg-color;
       }
-    }
-
-    label {
-      color: $secondary-color;
     }
   }
   .form-password {
     @apply input-container;
-    color: $neutral-color;
-    border-bottom-color: $neutral-color;
+
+    &:focus-within {
+      color: $secondary-color;
+      border-bottom-color: $secondary-color;
+    }
 
     input {
       @apply flex-grow;
@@ -79,10 +91,6 @@
       &::placeholder {
         color: $bg-color;
       }
-    }
-
-    label {
-      color: $neutral-color;
     }
   }
   .form-button {
@@ -131,8 +139,6 @@
   }
   .form-identifier-lg {
     @apply input-container;
-    color: $bg-color;
-    border-bottom-color: $bg-color;
 
     input {
       &::placeholder {
@@ -144,19 +150,12 @@
         box-shadow: 0 0 0 1000px $primary-color inset !important;
         -webkit-text-fill-color: $bg-color !important; /* Set text color to black */
       }
-    }
-
-    label {
-      color: $bg-color;
     }
   }
   .form-password-lg {
     @apply input-container;
-    color: $neutral-color;
-    border-bottom-color: $neutral-color;
 
     input {
-      color: $bg-color;
 
       &::placeholder {
         color: $primary-color;
@@ -167,10 +166,6 @@
         box-shadow: 0 0 0 1000px $primary-color inset !important;
         -webkit-text-fill-color: $bg-color !important; /* Set text color to black */
       }
-    }
-
-    label {
-      color: $neutral-color;
     }
   }
 }

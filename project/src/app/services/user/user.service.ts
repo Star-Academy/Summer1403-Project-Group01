@@ -11,4 +11,15 @@ export class UserService {
   getUser(): User | undefined {
     return this.user;
   }
+
+  setUser(): void {
+    this.user = {
+      id: 1,
+      firstName: "ali",
+      lastName: "analy",
+      email: "analyzer@gmail.com",
+      password: "",
+      role: "root"
+    };
+  }
 }

@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {UserService} from "../../services/user/user.service";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import { heroUser, heroLockClosed, heroArrowLeftEndOnRectangle } from '@ng-icons/heroicons/outline';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -18,13 +19,14 @@ export class LoginComponent {
     password: new FormControl('', Validators.required),
   });
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   onSubmit() {
     if (this.formGroup.valid) {
-      console.log(this.formGroup.value);
+      this.userService.setUser();
+      this.router.navigateByUrl('dashboard');
     } else {
-      alert("مشکلی در ورودی های شما وجود دارد.");
+      alert(JSON.stringify(this.formGroup.value));
     }
   }
 }

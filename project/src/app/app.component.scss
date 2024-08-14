@@ -2,7 +2,11 @@
 
 @layer components {
   .main {
-    @apply flex justify-center items-center min-h-screen relative;
-    background-color: $bg-color;
+    @apply fullscreen;
+    width: 100vw;
   }
+}
+
+app-dashboard {
+  inline-size: 100vw;
 }

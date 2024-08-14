@@ -1,1 +1,12 @@
-<p>dashboard works!</p>
+<div class="fullscreen">
+  <div #navbarIcon>
+    <ng-icon (click)="handleShowNavbar()" name="heroBars3" class="dashboard-navbar-icon"></ng-icon>
+  </div>
+  <nav #navbar class="dashboard-navbar hidden">
+    <ng-icon (click)="handleCloseNavbar()" name="heroArrowUturnRight" class="dashboard-navbar-back-icon"></ng-icon>
+    <app-navbar></app-navbar>
+  </nav>
+  <section #content class="dashboard-content">
+    <router-outlet></router-outlet>
+  </section>
+</div>

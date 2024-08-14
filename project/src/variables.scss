@@ -9,5 +9,14 @@ $neutral-color: #666666;
 $primary-color: #002B5B;
 $secondary-color: #4F81BD;
 $success-color: #4FBD70;
-$accent-color: #D4AF37;
+$accent-color: #E9B91B;
 $error-color: #B4131F;
+
+// Base classes
+@layer components {
+  .fullscreen {
+    @apply flex flex-row justify-center items-center min-h-screen relative;
+    background-color: $bg-color;
+    inline-size: 100%;
+  }
+}

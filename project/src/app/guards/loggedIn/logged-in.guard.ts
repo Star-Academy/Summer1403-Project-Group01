@@ -13,6 +13,9 @@ export const loggedInGuard: CanActivateFn = (route: ActivatedRouteSnapshot, stat
   else if (!user) {
     router.navigate(['login']);
     return false;
+  } else if (user && state.url === '/dashboard') {
+    router.navigate(['dashboard/profile']);
+    return true;
   }
   return true;
 };
