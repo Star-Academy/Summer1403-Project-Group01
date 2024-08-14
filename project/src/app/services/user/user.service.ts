@@ -11,7 +11,13 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUser(): User | undefined {
-    return this.user;
+    return {
+      username: "haaaadi",
+      email: "hadi@gmail.com",
+      firstName: "هادی",
+      lastName: "سرداری",
+      role: "dataanalyst",
+    };
   }
 
   login(user: {identifier: string, password: string}): void {
@@ -25,12 +31,5 @@ export class UserService {
     //   this.user.username = res?.username;
     //   localStorage.setItem('token', JSON.stringify(res?.token));
     // })
-    this.user = {
-      username: "haaaadi",
-      email: "hadi@gmail.com",
-      firstName: "هادی",
-      lastName: "سرداری",
-      role: "dataanalyst",
-    }
   }
 }
