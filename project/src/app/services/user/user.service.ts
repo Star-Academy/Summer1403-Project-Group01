@@ -18,6 +18,7 @@ export class UserService {
       firstName: "ali",
       lastName: "analy",
       email: "analyzer@gmail.com",
+      username: "aliaaaa",
       password: "",
       role: "root"
     };
