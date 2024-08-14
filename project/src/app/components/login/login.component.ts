@@ -23,7 +23,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      this.userService.setUser();
+      this.userService.login(this.formGroup.value);
       this.router.navigateByUrl('dashboard');
     } else {
       alert(JSON.stringify(this.formGroup.value));

@@ -1,26 +1,36 @@
 import { Injectable } from '@angular/core';
 import User from "../../interfaces/user";
+import {HttpClient} from "@angular/common/http";
+import {API_BASE_URL} from "../../app.config";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private user: User | undefined = undefined;
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getUser(): User | undefined {
     return this.user;
   }
 
-  setUser(): void {
+  login(user: {identifier: string, password: string}): void {
+    // const obj = {
+    //   email: user.identifier.includes('@') ? user.identifier : null,
+    //   username: user.identifier.includes('@') ? null : user.identifier,
+    //   password: user.password,
+    // }
+    // this.http.post(`${API_BASE_URL}Identity/Login`, obj, {headers: {'Content-Type': 'application/json'}}).subscribe((res: any) => {
+    //   this.user = {};
+    //   this.user.username = res?.username;
+    //   localStorage.setItem('token', JSON.stringify(res?.token));
+    // })
     this.user = {
-      id: 1,
-      firstName: "ali",
-      lastName: "analy",
-      email: "analyzer@gmail.com",
-      username: "aliaaaa",
-      password: "",
-      role: "root"
-    };
+      username: "haaaadi",
+      email: "hadi@gmail.com",
+      firstName: "هادی",
+      lastName: "سرداری",
+      role: "dataanalyst",
+    }
   }
 }
