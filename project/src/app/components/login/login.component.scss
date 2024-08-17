@@ -95,12 +95,18 @@
   }
   .form-button {
     @apply flex flex-row gap-2 self-stretch justify-center rounded-full p-2 mt-[4rem] transition-all duration-300 delay-75 ease-in-out text-[1.5rem] items-center;
+
     background: $accent-color;
     color: $bg-color;
 
+    border: 1px solid $accent-color;
+
     &:hover {
       @apply transition-all duration-300 delay-75 ease-in-out;
+
       background: $success-color;
+
+      border: 1px solid $success-color;
     }
   }
   .rectangle-top-left-lg {

@@ -25,21 +25,26 @@ export class UserService {
     return this.user;
   }
 
+  setUser(user: User): void {
+    this.user = user;
+    localStorage.setItem('userData', JSON.stringify(user));
+  }
+
   login(user: {identifier: string, password: string}): void {
     const obj = {
       email: user.identifier.includes('@') ? user.identifier : null,
       username: user.identifier.includes('@') ? null : user.identifier,
       password: user.password,
     }
-    this.http.post(`${API_BASE_URL}Identity/Login`, obj, {headers: {'Content-Type': 'application/json'}}).subscribe((res: any) => {
+    this.http.post(`${API_BASE_URL}Identity/Login`, obj).subscribe((res: any) => {
       this.user = {};
-      this.user.username = res?.username;
+      this.user.userName = res?.username;
       localStorage.setItem('token', JSON.stringify(res?.token));
       const userData = {
         firstName: res.firstName,
         lastName: res.lastName,
         email: res.email,
-        username: res.username,
+        userName: res.userName,
         role: res.role,
       };
       this.user = userData;

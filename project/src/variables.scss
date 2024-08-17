@@ -16,7 +16,53 @@ $error-color: #B4131F;
 @layer components {
   .fullscreen {
     @apply flex flex-row justify-center items-center min-h-screen relative;
+
     background-color: $bg-color;
+
     inline-size: 100%;
+  }
+  .form {
+    @apply flex flex-col justify-center items-center p-10 rounded-3xl gap-3;
+
+    background-color: $primary-color;
+    color: $bg-color;
+
+    box-shadow: 0 0 1.2rem $neutral-color;
+  }
+  .form-label {
+    @apply text-[3rem] m-5 border-b-2 p-4 transition-all duration-300 delay-75 ease-in-out
+    hover:text-sky-100;
+  }
+  .form-input {
+    @apply self-stretch focus:outline-none focus:border-none p-3 rounded-3xl text-[1.5rem] transition-all duration-300
+    delay-75 ease-in-out;
+
+    color: black;
+
+    &:focus {
+      @apply transition-all duration-300 delay-75 ease-in-out;
+
+      box-shadow: 0 0 1.2rem $accent-color;
+    }
+  }
+  .form-invalid {
+    @apply p-2 text-[1.3rem] m-2 font-bold;
+
+    color: $error-color;
+  }
+  .form-button {
+    @apply p-4 m-4 rounded-2xl text-[1.5rem] transition-all duration-300 delay-75 ease-in-out;
+
+    background: transparent;
+    color: $success-color;
+
+    border: 2px solid $success-color;
+
+    &:hover {
+      @apply transition-all duration-300 delay-75 ease-in-out;
+
+      background: $success-color;
+      color: $bg-color;
+    }
   }
 }
