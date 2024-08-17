@@ -2,10 +2,10 @@
 <h3>{{ user?.username }}</h3>
 <p>{{ user?.email }}</p>
 <div>
-  @if (user?.role === "admin") {
+  @if (user?.role?.toLowerCase() === "admin") {
     <ng-icon name="heroUserCircleSolid"></ng-icon>
     <p>System admin</p>
-  } @else if (user?.role === "dataadmin") {
+  } @else if (user?.role?.toLowerCase() === "dataadmin") {
     <ng-icon name="heroCircleStackSolid"></ng-icon>
     <p>Data admin</p>
   } @else {

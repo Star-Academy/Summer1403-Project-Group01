@@ -11,7 +11,7 @@ export const routes: Routes = [
       {path: 'profile', component: ProfileComponent},
       {path: 'edit-profile', component: EditProfileComponent},
       {path: 'change-password', component: ChangePasswordComponent},
-    ], /** canActivate: [loggedInGuard], data: { requiresAuth: true } */ },
+    ], canActivate: [loggedInGuard], data: { requiresAuth: true } },
   {path: 'login', component: LoginComponent, canActivate: [loggedInGuard], data: { requiresAuth: false }},
   {path: '**', redirectTo: 'dashboard'}
 ];

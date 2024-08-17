@@ -2,4 +2,5 @@
   <li routerLink="profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">پروفایل</li>
   <li routerLink="change-password" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">عوض کردن گذرواژه</li>
   <li routerLink="edit-profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">ادیت کردن پروفایل</li>
+  <li (click)="handleLogout()" class="navbar-item">خروج از حساب</li>
 </ul>
