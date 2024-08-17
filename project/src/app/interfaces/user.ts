@@ -1,5 +1,5 @@
 export default interface User {
-  role?: "admin" | "dataadmin" | "dataanalyst";
+  role?: string;
   email?: string;
   userName?: string;
   firstName?: string;

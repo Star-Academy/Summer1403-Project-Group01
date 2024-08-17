@@ -6,7 +6,7 @@ import {API_BASE_URL} from "../../app.config";
 interface ChangeData {
   firstName: string,
   lastName: string,
-  username: string
+  userName: string
 }
 
 interface ChangePassword {
@@ -36,7 +36,7 @@ export class ModifyUserService {
       const user = {
         firstName: data.firstName,
         lastName: data.lastName,
-        userName: data.username,
+        userName: data.userName,
         ...this.userService.getUser()
       }
       this.userService.setUser(user);
