@@ -15,22 +15,15 @@ export class UserService {
   }
 
   login(user: {identifier: string, password: string}): void {
-    // const obj = {
-    //   email: user.identifier.includes('@') ? user.identifier : null,
-    //   username: user.identifier.includes('@') ? null : user.identifier,
-    //   password: user.password,
-    // }
-    // this.http.post(`${API_BASE_URL}Identity/Login`, obj, {headers: {'Content-Type': 'application/json'}}).subscribe((res: any) => {
-    //   this.user = {};
-    //   this.user.username = res?.username;
-    //   localStorage.setItem('token', JSON.stringify(res?.token));
-    // })
-    this.user = {
-      username: "haaaadi",
-      email: "hadi@gmail.com",
-      firstName: "هادی",
-      lastName: "سرداری",
-      role: "dataanalyst",
+    const obj = {
+      email: user.identifier.includes('@') ? user.identifier : null,
+      username: user.identifier.includes('@') ? null : user.identifier,
+      password: user.password,
     }
+    this.http.post(`${API_BASE_URL}Identity/Login`, obj, {headers: {'Content-Type': 'application/json'}}).subscribe((res: any) => {
+      this.user = {};
+      this.user.username = res?.username;
+      localStorage.setItem('token', JSON.stringify(res?.token));
+    })
   }
 }
