@@ -1,0 +1,10 @@
+<ul class="navbar-list">
+  <li routerLink="profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">پروفایل</li>
+  <li routerLink="change-password" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">عوض کردن گذرواژه</li>
+  <li routerLink="edit-profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">ادیت کردن پروفایل</li>
+  @if (user?.role?.toLowerCase() === "admin") {
+    <li routerLink="manage-users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">مدیریت کاربران</li>
+  }
+  <li routerLink="show-data" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">مشاهده و آنالیز فایل ها</li>
+  <li (click)="handleLogout()" class="navbar-item">خروج از حساب</li>
+</ul>
