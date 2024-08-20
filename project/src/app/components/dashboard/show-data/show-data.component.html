@@ -1,7 +1,14 @@
 @if (user?.role?.toLowerCase() === "admin" || user?.role?.toLowerCase() === "dataadmin") {
   <form (submit)="onSubmit()" class="upload-form">
+    <label for="type">نوع فایل:</label>
+    <select #selectElement id="type" class="select-group">
+      <option value="transaction">تراکنش ها</option>
+      <option value="account">هویت ها</option>
+    </select>
     <label #labelElement for="upload-input" class="input-label">برای انتخاب فایل کلیک کنید</label>
     <input #inputElement id="upload-input" class="upload-input" type="file" [multiple]="false" accept="text/csv" (change)="handleChange()" />
-    <button class="form-button" type="submit">آپلود کردن فایل</button>
+    <button class="form-button" type="submit" [disabled]="handleDisabled()">آپلود کردن فایل</button>
   </form>
 }
+
+<button class="show-button">نشان داده داده ها به صورت جدول</button>

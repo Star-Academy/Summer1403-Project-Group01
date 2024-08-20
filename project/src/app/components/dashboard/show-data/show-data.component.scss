@@ -2,29 +2,41 @@
 
 @layer utilities {
   .upload-form {
-    @apply border-2 border-t-0 rounded-2xl p-4;
+    @apply border-2 border-t-0 rounded-2xl p-4 text-[2rem] flex flex-row items-center justify-start gap-6;
     border-color: $neutral-color;
   }
   .upload-input {
     @apply hidden;
   }
   .input-label {
-    @apply cursor-pointer text-[2rem] m-6 p-2;
+    @apply cursor-pointer p-2;
 
     &:hover {
       @apply border-b border-b-black
     }
   }
   .form-button {
-    @apply text-[2rem];
     color: $primary-color;
-
     border-color: $primary-color;
 
     &:hover {
       color: $bg-color;
-
       background-color: $primary-color;
     }
+
+    &:disabled {
+      opacity: 0.5;
+
+      &:hover {
+        color: $primary-color;
+        background-color: $bg-color;
+      }
+    }
+  }
+  .select-group {
+    @apply focus:outline-none p-2 rounded-2xl;
+    background-color: $bg-color;
+
+    border: 1px solid black;
   }
 }
