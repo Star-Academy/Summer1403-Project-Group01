@@ -1,0 +1,7 @@
+@if (user?.role?.toLowerCase() === "admin" || user?.role?.toLowerCase() === "dataadmin") {
+  <form (submit)="onSubmit()" class="upload-form">
+    <label #labelElement for="upload-input" class="input-label">برای انتخاب فایل کلیک کنید</label>
+    <input #inputElement id="upload-input" class="upload-input" type="file" [multiple]="false" accept="text/csv" (change)="handleChange()" />
+    <button class="form-button" type="submit">آپلود کردن فایل</button>
+  </form>
+}
