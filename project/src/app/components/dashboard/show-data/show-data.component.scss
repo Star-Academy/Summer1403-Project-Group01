@@ -1,6 +1,9 @@
 @import "../../../../variables";
 
 @layer utilities {
+  .data-show-container {
+    @apply flex flex-col justify-start items-center gap-4 h-[100vh];
+  }
   .upload-form {
     @apply border-2 border-t-0 rounded-2xl p-4 text-[2rem] flex flex-row items-center justify-start gap-6;
     border-color: $neutral-color;
@@ -38,5 +41,49 @@
     background-color: $bg-color;
 
     border: 1px solid black;
+  }
+  .show-button {
+    @apply text-[2rem] self-center border rounded-3xl p-3 transition-all duration-300 ease-in-out;
+    color: $primary-color;
+    border-color: $primary-color;
+
+    &:hover {
+      @apply transition-all duration-300 ease-in-out;
+      background-color: $primary-color;
+      color: $bg-color;
+    }
+  }
+  .table-container {
+    @apply absolute p-6 justify-center items-center rounded-2xl hidden text-[1.5rem] overflow-auto;
+    background-color: $primary-color;
+    color: $bg-color;
+
+    inline-size: 70rem;
+    block-size: 50rem;
+
+    inset-block-start: calc(50vh - 25rem);
+    inset-inline-start: calc(50vw - 35rem);
+
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+    scrollbar-color: $secondary-color $primary-color;
+  }
+  .table {
+    @apply border-separate border-spacing-4 table-auto mt-10;
+
+    thead {
+      @apply top-0 sticky;
+      background-color: $secondary-color;
+    }
+
+    td, th {
+      @apply border-b p-1;
+      border-color: $bg-color;
+    }
+  }
+  .xicon {
+    @apply absolute w-[4rem] h-[4rem] top-0 right-0;
+    color: $bg-color;
   }
 }

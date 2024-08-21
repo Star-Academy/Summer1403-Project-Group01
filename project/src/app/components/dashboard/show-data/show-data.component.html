@@ -1,14 +1,43 @@
-@if (user?.role?.toLowerCase() === "admin" || user?.role?.toLowerCase() === "dataadmin") {
-  <form (submit)="onSubmit()" class="upload-form">
-    <label for="type">نوع فایل:</label>
-    <select #selectElement id="type" class="select-group">
-      <option value="transaction">تراکنش ها</option>
-      <option value="account">هویت ها</option>
-    </select>
-    <label #labelElement for="upload-input" class="input-label">برای انتخاب فایل کلیک کنید</label>
-    <input #inputElement id="upload-input" class="upload-input" type="file" [multiple]="false" accept="text/csv" (change)="handleChange()" />
-    <button class="form-button" type="submit" [disabled]="handleDisabled()">آپلود کردن فایل</button>
-  </form>
-}
+<section class="data-show-container">
+  @if (user?.role?.toLowerCase() === "admin" || user?.role?.toLowerCase() === "dataadmin") {
+    <form (submit)="onSubmit()" class="upload-form">
+      <label for="type">نوع فایل:</label>
+      <select #selectElement id="type" class="select-group">
+        <option value="transaction">تراکنش ها</option>
+        <option value="account">هویت ها</option>
+      </select>
+      <label #labelElement for="upload-input" class="input-label">برای انتخاب فایل کلیک کنید</label>
+      <input #inputElement id="upload-input" class="upload-input" type="file" [multiple]="false" accept="text/csv" (change)="handleChange()" />
+      <button class="form-button" type="submit" [disabled]="handleDisabled()">آپلود کردن فایل</button>
+    </form>
+  }
 
-<button class="show-button">نشان داده داده ها به صورت جدول</button>
+  <button data-trigger-button class="show-button" (click)="showData()">نشان دادن داده ها به صورت جدول</button><hr />
+  <div #dataElement class="table-container" appBlurClick (blurClick)="handleClose()">
+    <ng-icon name="heroXMark" class="xicon" (click)="handleClose()"></ng-icon>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>حساب مبدا</th>
+          <th>حساب مقصد</th>
+          <th>مبلغ تراکنش</th>
+          <th>تاریخ</th>
+          <th>نوع تراکنش</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (trans of data; track trans.TransactionId) {
+          <tr>
+            <td>{{ trans.sourceAccountId }}</td>
+            <td>{{ trans.destinationAccountId }}</td>
+            <td>{{ trans.amount | rialPipe }}</td>
+            <td>{{ trans.date | persianDate }}</td>
+            <td>{{ trans.type }}</td>
+          </tr>
+        } @empty {
+          <h4>هیچ داده ای برای نمایش یافت نشد.</h4>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
