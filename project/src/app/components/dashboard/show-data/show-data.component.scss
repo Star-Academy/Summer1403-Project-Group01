@@ -1,0 +1,30 @@
+@import "../../../../variables";
+
+@layer utilities {
+  .upload-form {
+    @apply border-2 border-t-0 rounded-2xl p-4;
+    border-color: $neutral-color;
+  }
+  .upload-input {
+    @apply hidden;
+  }
+  .input-label {
+    @apply cursor-pointer text-[2rem] m-6 p-2;
+
+    &:hover {
+      @apply border-b border-b-black
+    }
+  }
+  .form-button {
+    @apply text-[2rem];
+    color: $primary-color;
+
+    border-color: $primary-color;
+
+    &:hover {
+      color: $bg-color;
+
+      background-color: $primary-color;
+    }
+  }
+}
