@@ -25,6 +25,7 @@ FROM base as test
 
 COPY /project/ .
 
+RUN ng lint --fix
 RUN ng lint
 
 RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox
