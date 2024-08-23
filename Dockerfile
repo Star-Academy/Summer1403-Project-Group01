@@ -23,7 +23,9 @@ ENV CHROME_BIN="/usr/bin/google-chrome"
 # Stage 2: Test
 FROM base as test
 
-COPY /project/ .
+COPY . .
+
+RUN ng lint
 
 RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox
 
