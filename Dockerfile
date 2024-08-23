@@ -23,7 +23,7 @@ ENV CHROME_BIN="/usr/bin/google-chrome"
 # Stage 2: Test
 FROM base as test
 
-COPY . .
+COPY /project/ .
 
 RUN ng lint
 
