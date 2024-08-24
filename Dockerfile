@@ -31,7 +31,7 @@ FROM base as build
 
 COPY /project/ .
 
-RUN npm ci
+RUN npm ci && npm install -g @angular/cli@18.1.4
 
 # Build both the client and server-side parts
 RUN npm run build
