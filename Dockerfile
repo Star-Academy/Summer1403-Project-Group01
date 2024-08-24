@@ -1,8 +1,6 @@
 # Stage 1: Base setup
 FROM node:20 AS base
 
-FROM base as test
-
 WORKDIR /app
 
 COPY /project/package*.json ./
@@ -22,6 +20,9 @@ RUN apt-get update && apt-get install -y \
 
 ENV CHROME_BIN="/usr/bin/google-chrome"
 
+# Stage 2: Test
+FROM base as test
+
 COPY /project/ .
 
 RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox
@@ -31,7 +32,7 @@ FROM base as build
 
 COPY /project/ .
 
-RUN npm ci && npm install -g @angular/cli@18.1.4
+RUN npm ci
 
 # Build both the client and server-side parts
 RUN npm run build
