@@ -38,30 +38,30 @@ RUN npm ci
 RUN npm run build
 
 
-#FROM nginx:latest as nginx
+FROM nginx:latest as nginx
 
-#COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy static assets from the build
-#COPY --from=build /app/dist/project/browser/ /usr/share/nginx/html/
+COPY --from=build /app/dist/project/browser/ /usr/share/nginx/html/
 
 
 
 # Stage 4: Server
-FROM base AS server
+#FROM base AS server
 
-WORKDIR /app
+#WORKDIR /app
 
 # Copy the compiled server-side application from the build stage
-COPY --from=build /app/dist/project/ /app/dist/
+#COPY --from=build /app/dist/project/ /app/dist/
 
 # Install only production dependencies
-COPY /project/package*.json ./
-RUN npm ci --only=production
+#COPY /project/package*.json ./
+#RUN npm ci --only=production
 
-EXPOSE 4000
+#EXPOSE 4000
 
 # Start the Node.js server to handle SSR
-CMD ["node", "dist/server/server.mjs"]
+#CMD ["node", "dist/server/server.mjs"]
 
 
