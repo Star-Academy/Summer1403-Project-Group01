@@ -5,12 +5,10 @@
 
 // Colors
 $bg-color: #FDFDFD;
-$neutral-color: #666666;
-$primary-color: #002B5B;
-$secondary-color: #4F81BD;
+$primary-color: rgb(18, 91, 154);
 $success-color: #4FBD70;
 $accent-color: #E9B91B;
-$error-color: #B4131F;
+$error-color: #F05A7E;
 
 // Base classes
 @layer components {
@@ -27,7 +25,7 @@ $error-color: #B4131F;
     background-color: $primary-color;
     color: $bg-color;
 
-    box-shadow: 0 0 1.2rem $neutral-color;
+    box-shadow: 0 0 1.2rem black;
   }
   .form-label {
     @apply text-[3rem] m-5 border-b-2 p-4 transition-all duration-300 delay-75 ease-in-out

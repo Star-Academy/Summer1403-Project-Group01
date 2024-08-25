@@ -9,8 +9,8 @@
   }
   .input-container {
     @apply flex flex-row justify-start items-center w-[24rem] h-[2.7rem] border-b-[0.1rem] gap-[0.5rem] mt-[2rem] relative;
-    color: $neutral-color;
-    border-bottom-color: $neutral-color;
+    color: black;
+    border-bottom-color: black;
 
     &:focus-within {
       color: $bg-color;
@@ -65,15 +65,15 @@
     @apply input-container;
 
     &:focus-within {
-      color: $secondary-color;
-      border-bottom-color: $secondary-color;
+      color: $bg-color;
+      border-bottom-color: $bg-color;
     }
 
     input {
       @apply flex-grow;
 
       &::placeholder {
-        color: $bg-color;
+        color: $primary-color;
       }
     }
   }
@@ -81,15 +81,15 @@
     @apply input-container;
 
     &:focus-within {
-      color: $secondary-color;
-      border-bottom-color: $secondary-color;
+      color: $bg-color;
+      border-bottom-color: $bg-color;
     }
 
     input {
       @apply flex-grow;
 
       &::placeholder {
-        color: $bg-color;
+        color: $primary-color;
       }
     }
   }
@@ -126,7 +126,7 @@
   }
   .svg-form-lg {
     @apply w-[100%] h-[100%] fill-none basis-1/2 rounded-l-3xl;
-    background: $secondary-color;
+    background-color: rgb(18 91 154 / 80%);
   }
   .form-container-lg {
     @apply basis-1/2 rounded-r-3xl flex flex-row justify-center items-center;

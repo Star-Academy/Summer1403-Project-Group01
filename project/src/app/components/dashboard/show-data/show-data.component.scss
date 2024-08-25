@@ -6,7 +6,7 @@
   }
   .upload-form {
     @apply border-2 border-t-0 rounded-2xl p-4 text-[2rem] flex flex-row items-center justify-start gap-6;
-    border-color: $neutral-color;
+    border-color: black;
   }
   .upload-input {
     @apply hidden;
@@ -67,14 +67,15 @@
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-gutter: stable;
-    scrollbar-color: $secondary-color $primary-color;
+    scrollbar-color: $bg-color $primary-color;
   }
   .table {
     @apply border-separate border-spacing-4 table-auto mt-10;
 
     thead {
       @apply top-0 sticky;
-      background-color: $secondary-color;
+      background-color: $bg-color;
+      color: black;
     }
 
     td, th {
