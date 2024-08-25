@@ -7,13 +7,14 @@ import {EditProfileComponent} from "./components/dashboard/edit-profile/edit-pro
 import {ChangePasswordComponent} from "./components/dashboard/change-password/change-password.component";
 import {ManageUsersComponent} from "./components/dashboard/manage-users/manage-users.component";
 import {ShowDataComponent} from "./components/dashboard/show-data/show-data.component";
+import {isAdminGuard} from "./guards/admin/is-admin.guard";
 
 export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, children: [
       {path: 'profile', component: ProfileComponent},
       {path: 'edit-profile', component: EditProfileComponent},
       {path: 'change-password', component: ChangePasswordComponent},
-      {path: 'manage-users', component: ManageUsersComponent},
+      {path: 'manage-users', component: ManageUsersComponent, canActivate: [isAdminGuard]},
       {path: 'show-data', component: ShowDataComponent},
     ], canActivate: [loggedInGuard], data: { requiresAuth: true } },
   {path: 'login', component: LoginComponent, canActivate: [loggedInGuard], data: { requiresAuth: false }},

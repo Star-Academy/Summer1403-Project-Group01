@@ -11,9 +11,6 @@ export class BlurClickDirective {
 
   @HostListener('document:click', ['$event.target'])
   handleBlur(element: HTMLElement) {
-    console.log(this.element.nativeElement.style.display === 'flex')
-    console.log(!this.element.nativeElement.contains(element))
-    console.log(element.dataset)
     if (this.element.nativeElement.style.display === 'flex' && !this.element.nativeElement.contains(element)
       && element.dataset['triggerButton'] === undefined) {
       this.blurClick.emit();

@@ -50,4 +50,17 @@ export class ModifyUserService {
         console.log(response);
       });
   }
+
+  alterRole(userName: string, role: string): void {
+    const token = this.getToken();
+    const data = {
+      userName,
+      role
+    }
+
+    this.http.put(API_BASE_URL + 'Identity/ChangeRole', data, {headers: {'Authorization': "Bearer " + token}})
+      .subscribe((response) => {
+        console.log(response);
+      })
+  }
 }
