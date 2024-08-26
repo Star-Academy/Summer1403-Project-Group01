@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, HostListener, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {UserService} from "../../../services/user/user.service";
 import User from "../../../interfaces/user";
 import {FormsModule} from "@angular/forms";

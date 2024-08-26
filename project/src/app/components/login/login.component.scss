@@ -59,7 +59,7 @@
   }
   .form-title {
     @apply mb-[4rem] text-[3rem] font-bold;
-    color: $primary-color;
+    color: $bg-color;
   }
   .form-identifier {
     @apply input-container;
@@ -111,8 +111,8 @@
     &:active {
         @apply transition-transform duration-150 ease-in-out;
 
-        transform: scale(0.95); 
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); 
+        transform: scale(0.95);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     }
 }
 
@@ -132,7 +132,7 @@
     @apply flex flex-row-reverse gap-0 w-[120rem] h-[60rem];
   }
   .p-svg-form-lg {
-    @apply w-[100%] h-[100%] fill-none basis-2/5 rounded-l-3xl flex w-full ;
+    @apply h-[100%] fill-none basis-2/5 rounded-l-3xl flex w-full ;
     background-color: $secondary-color;
   }
   .svg-form-lg {
