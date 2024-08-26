@@ -4,11 +4,12 @@ import {UserService} from "../../services/user/user.service";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import { heroUser, heroLockClosed, heroArrowLeftEndOnRectangle } from '@ng-icons/heroicons/outline';
 import {Router} from "@angular/router";
+import { BgGifComponent } from '../bg-gif/bg-gif.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIconComponent],
+  imports: [ReactiveFormsModule, NgIconComponent ,BgGifComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   providers: [provideIcons({heroUser, heroLockClosed, heroArrowLeftEndOnRectangle})]
