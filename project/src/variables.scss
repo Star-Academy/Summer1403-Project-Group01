@@ -5,7 +5,10 @@
 
 // Colors
 $bg-color: #FDFDFD;
-$primary-color: rgb(18, 91, 154);
+
+$primary-color: #002B5B;
+$text-color : #172535;
+$secondary-color: #4F86C9;
 $success-color: #4FBD70;
 $accent-color: #E9B91B;
 $error-color: #F05A7E;
@@ -15,7 +18,6 @@ $error-color: #F05A7E;
   .fullscreen {
     @apply flex flex-row justify-center items-center min-h-screen relative;
 
-    background-color: $bg-color;
 
     inline-size: 100%;
   }
