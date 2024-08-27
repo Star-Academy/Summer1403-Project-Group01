@@ -87,4 +87,48 @@
     @apply absolute w-[4rem] h-[4rem] top-0 right-0;
     color: $bg-color;
   }
+  .form-search-user {
+    @apply text-[2rem] self-center border rounded-2xl transition-all duration-300 ease-in-out p-4 flex flex-row
+      gap-4 items-center;
+    inline-size: 70rem;
+
+    input {
+      @apply flex-grow p-4 rounded-2xl;
+    }
+  }
+  #graph-container {
+    @apply self-stretch flex-grow m-8 rounded-xl;
+    background-color: $secondary-color;
+  }
+}
+.context-menu-container {
+  position: absolute;
+
+  display: none;
+
+  padding: 1rem;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: $primary-color;
+  color: $bg-color;
+
+  font-size: 1.6rem;
+
+  ul {
+    list-style: none;
+
+    padding: 0.1rem;
+
+    li {
+      padding: 0.5rem;
+      user-select: none;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }

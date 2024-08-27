@@ -13,6 +13,10 @@
   }
 
   <button data-trigger-button class="show-button" (click)="showData()">نشان دادن داده ها به صورت جدول</button><hr />
+  <div class="form-search-user">
+    <label for="search-user">شماره حساب کاربر:</label>
+    <input id="search-user" type="search" placeholder="جستجو و نمایش گرافی داده های تراکنش یک کاربر" />
+  </div>
   <div #dataElement class="table-container" appBlurClick (blurClick)="handleClose()">
     <ng-icon name="heroXMark" class="xicon" (click)="handleClose()"></ng-icon>
     <table class="table">
@@ -40,6 +44,11 @@
       </tbody>
     </table>
   </div>
+  <div id="graph-container" #graphElement></div>
 </section>
-
-<div id="graph-container"></div>
+<div #contextElement class="context-menu-container" appBlurClick (blurClick)="handleCloseContext()">
+  <ul>
+    <li>نمایش کاربر</li>
+    <li>افزایش تراکنش ها</li>
+  </ul>
+</div>

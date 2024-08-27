@@ -36,7 +36,7 @@ export class UserService {
       username: user.identifier.includes('@') ? null : user.identifier,
       password: user.password,
     }
-    this.http.post(`${API_BASE_URL}Identity/Login`, obj).subscribe((res: any) => {
+    this.http.post(`${API_BASE_URL}identity/login`, obj).subscribe((res: any) => {
       this.user = {};
       this.user.userName = res?.username;
       localStorage.setItem('token', JSON.stringify(res?.token));
