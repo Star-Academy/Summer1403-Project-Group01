@@ -8,9 +8,11 @@ import {ChangePasswordComponent} from "./components/dashboard/change-password/ch
 import {ManageUsersComponent} from "./components/dashboard/manage-users/manage-users.component";
 import {ShowDataComponent} from "./components/dashboard/show-data/show-data.component";
 import {isAdminGuard} from "./guards/admin/is-admin.guard";
+import { DashboardhomeComponent } from './components/dashboard/dashboardhome/dashboardhome.component';
 
 export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, children: [
+      {path: 'home', component: DashboardhomeComponent},
       {path: 'profile', component: ProfileComponent},
       {path: 'edit-profile', component: EditProfileComponent},
       {path: 'change-password', component: ChangePasswordComponent},

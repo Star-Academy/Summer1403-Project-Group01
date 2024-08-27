@@ -36,7 +36,7 @@ export class EditProfileComponent {
         userName: this.formGroup.value.userName || this.userService.getUser()?.userName
       }
       this.modifyService.modifyUser(data);
-      this.router.navigate(['dashboard/profile']);
+      this.router.navigate(['dashboard/home']);
     } else {
       alert("اشکالی در ورودی های شما وجود دارد.")
     }

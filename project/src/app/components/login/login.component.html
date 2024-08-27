@@ -17,7 +17,7 @@
       <input
         id="password"
         name="password"
-        type="text"
+        type="password"
         placeholder="رمز عبور"
         formControlName="password"
       />
@@ -102,11 +102,14 @@
           <input
             id="password-lg"
             name="password"
-            type="text"
+            [type]="inputType"
             placeholder="رمز عبور"
             formControlName="password"
-          />
+          />  
           <label for="password-lg">رمز عبور</label>
+          <ng-icon class="cursor-pointer" name="heroEyeSlash" [hidden]="eyeclose" (click)="changeEyes()"></ng-icon>
+          <ng-icon class="cursor-pointer" name="heroEye" [hidden]="!eyeclose" (click)="changeEyes()"></ng-icon>
+          
         </div>
         <button class="form-button">
           ورود به کد استار

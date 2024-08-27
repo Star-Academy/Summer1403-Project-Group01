@@ -59,7 +59,7 @@ export class ManageUsersComponent {
       if (user?.userName === this.finalUsers[index].userName!) {
         user.role = selected;
         this.userService.setUser(user);
-        this.router.navigateByUrl('dashboard/profile');
+        this.router.navigateByUrl('dashboard/home');
       }
     }
   }
