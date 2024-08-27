@@ -13,4 +13,4 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch())],
 };
 
-export const API_BASE_URL: string = 'http://localhost:8080/';
+export const API_BASE_URL: string = 'http://external.abriment.com:30080/';
