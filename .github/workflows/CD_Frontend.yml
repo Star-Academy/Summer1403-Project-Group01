@@ -8,6 +8,8 @@ on:
 jobs:
   version-and-release:
     runs-on: ubuntu-latest
+    outputs:  
+      frontimage_version: ${{ steps.tag_version.outputs.new_tag }}
 
     steps:
       - name: Checkout code
@@ -62,10 +64,10 @@ jobs:
       - name: Update Angular Image Tag in Helm Chart
         run: |
           cd Summer1403-Project-Group01-Deployment/mychart
-          sed -i 's|image: mohammadsadeghmontazeri/starfront:.*|image: mohammadsadeghmontazeri/starfront:${{ steps.tag_version.outputs.new_tag }}|' values.yaml
+          sed -i 's|image: mohammadsadeghmontazeri/starfront:.*|image: mohammadsadeghmontazeri/starfront:${{ needs.version-and-release.outputs.frontimage_version }}|' values.yaml
           git config --global user.email "sadeghmomo2020@gmail.com"
           git config --global user.name "msm1984"
-          git commit -am "Update Angular image tag to ${{ steps.tag_version.outputs.new_tag }}"
+          git commit -am "Update Angular image tag to ${{ needs.version-and-release.outputs.frontimage_version }}"
       
       - name: Push to Deployment Repository
         run: |
