@@ -7,7 +7,8 @@
     </p>
     </div>
   <li routerLink="home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
-    <ng-icon name="heroHome"></ng-icon>
+    <ng-icon name="heroHome" [hidden]="isActive('home')" ></ng-icon>
+    <ng-icon name="heroHomeSolid" [hidden]="!isActive('home')"></ng-icon>
     <span>
       خانه
     </span>
@@ -15,36 +16,23 @@
 
   </li>
   <li routerLink="profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
-    <ng-icon name="heroUser"></ng-icon>
+    <ng-icon name="heroUserCircle" [hidden]="isActive('profile')" ></ng-icon>
+    <ng-icon name="heroUserCircleSolid" [hidden]="!isActive('profile')"></ng-icon>
     <span>پروفایل</span>
     <ng-icon name="heroArrowLeft" class="heroArrowLeft"></ng-icon>
-
-  </li>
-  <li routerLink="change-password" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
-    <ng-icon name="heroUser"></ng-icon>
-
-    <span>عوض کردن گذرواژه</span>
-  </li>
-  <li routerLink="edit-profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
-    <ng-icon name="heroUser"></ng-icon>
-
-    <span>ادیت کردن پروفایل</span>
   </li>
   @if (user?.role?.toLowerCase() === "admin") {
     <li routerLink="manage-users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
-      <ng-icon name="heroUser"></ng-icon>
-
+      <ng-icon name="heroUserGroup" [hidden]="isActive('manage-users')" ></ng-icon>
+      <ng-icon name="heroUserGroupSolid" [hidden]="!isActive('manage-users')"></ng-icon> 
       <span>مدیریت کاربران</span>
+      <ng-icon name="heroArrowLeft" class="heroArrowLeft"></ng-icon>
     </li>
   }
   <li routerLink="show-data" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
-    <ng-icon name="heroUser"></ng-icon>
-
+    <ng-icon name="heroChartBar" [hidden]="isActive('show-data')" ></ng-icon>
+    <ng-icon name="heroChartBarSolid" [hidden]="!isActive('show-data')"></ng-icon>
     <span>مشاهده و آنالیز فایل ها</span>
-  </li>
-  <li (click)="handleLogout()" class="navbar-item">
-    <ng-icon name="heroUser"></ng-icon>
-
-    <span>خروج از حساب</span>
+    <ng-icon name="heroArrowLeft" class="heroArrowLeft"></ng-icon>
   </li>
 </ul>

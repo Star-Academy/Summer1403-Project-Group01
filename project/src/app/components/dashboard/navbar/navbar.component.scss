@@ -3,19 +3,18 @@
 @layer components {
   
   .navbar-list {
-    @apply flex flex-col justify-start  gap-3 p-4 w-full self-center ;
+    @apply flex flex-col justify-start  gap-[20px] p-[1.5rem] w-full self-center ;
     background-color: $primary-color;
     height: 90%;
-    border-radius: 20px 0 10px 20px;
+    border-radius: 20px 0 0px 20px;
 
     .logo{ 
-      height: 160px;
-      margin-bottom: 40px;
+      height: 210px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 15px;
+      gap: 25px;
       p{
         color: $bg-color;
         font-size: 32px;
@@ -29,7 +28,7 @@
   }
 }
   .navbar-item {
-    @apply text-[2rem] hover:cursor-pointer transition-all duration-100 delay-75 ease-in-out  rounded-2xl;
+    @apply text-[2rem] hover:cursor-pointer transition-all delay-75 ease-in-out  rounded-2xl;
     color: $secondary-color;
 
     background-color: $primary-color;
@@ -49,14 +48,15 @@
       border: 3px solid $secondary-color;
       .heroArrowLeft{
         color: $secondary-color;
+        display: block;
+        transition-duration: 0.3s;
       }
     }
     ng-icon{
       --ng-icon__size: 2.3rem !important;
     }
     .heroArrowLeft{
-      transition-duration: 0.3s;
-      color: $primary-color;
+      display: none;
     }
   }
   .active {
@@ -67,9 +67,8 @@
       color: $bg-color
     }
     
-    .heroArrowLeft{
-      transition-duration: 0.5s;
-      color: $secondary-color;
+    .heroArrowLeft {
+      display: none;
     }
   }
   

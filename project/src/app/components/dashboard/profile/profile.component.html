@@ -14,4 +14,15 @@
       <p>آنالیزگر</p>
     }
   </div>
+  <ul>
+    <li routerLink="change-password" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">  
+      <span>عوض کردن گذرواژه</span>
+    </li>
+    <li routerLink="edit-profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
+      <span>ادیت کردن پروفایل</span>
+    </li>
+    <li (click)="handleLogout()" class="navbar-item">  
+      <span>خروج از حساب</span>
+    </li>
+  </ul>
 </div>

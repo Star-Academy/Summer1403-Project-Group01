@@ -13,9 +13,10 @@ import { DashboardhomeComponent } from './components/dashboard/dashboardhome/das
 export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, children: [
       {path: 'home', component: DashboardhomeComponent},
-      {path: 'profile', component: ProfileComponent},
-      {path: 'edit-profile', component: EditProfileComponent},
-      {path: 'change-password', component: ChangePasswordComponent},
+      {path: 'profile', component: ProfileComponent , children: [
+        {path: 'edit-profile', component: EditProfileComponent},
+        {path: 'change-password', component: ChangePasswordComponent},
+      ]},
       {path: 'manage-users', component: ManageUsersComponent, canActivate: [isAdminGuard]},
       {path: 'show-data', component: ShowDataComponent},
     ], canActivate: [loggedInGuard], data: { requiresAuth: true } },
