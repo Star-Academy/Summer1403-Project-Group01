@@ -47,3 +47,25 @@ jobs:
             steps.tag_version.outputs.changelog
           draft: false
           prerelease: false
+  helm-update:
+    runs-on: ubuntu-latest
+    needs: [version-and-release]
+    steps:
+      - name: Clone Deployment Repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        with:
+          depth: 1
+          branch: 'main'
+          owner: 'Star-Academy'
+          repository: 'Summer1403-Project-Group01-Deployment'
+      
+      - name: Update Angular Image Tag in Helm Chart
+        run: |
+          cd Summer1403-Project-Group01-Deployment/mychart
+          sed -i 's|image: mohammadsadeghmontazeri/starfront:.*|image: mohammadsadeghmontazeri/starfront:${{ steps.tag_version.outputs.new_tag }}|' values.yaml
+          git config --global user.email "sadeghmomo2020@gmail.com"
+          git config --global user.name "msm1984"
+          git commit -am "Update Angular image tag to ${{ steps.tag_version.outputs.new_tag }}"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
