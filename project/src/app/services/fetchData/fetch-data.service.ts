@@ -13,6 +13,18 @@ interface Transaction {
   type: string
 }
 
+interface AccountTransaction {
+  transactionWithSources: {
+    transactionID: number;
+    sourceAcount: number;
+    destiantionAccount: number;
+    amount: number;
+    date: string;
+    type: string;
+  }[];
+  accountId: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +35,11 @@ export class FetchDataService {
   fetchData(): Promise<Transaction[]> {
     const token = this.getToken();
     return firstValueFrom(this.http.get<Transaction[]>(API_BASE_URL + 'transactions', {headers: {'Authorization': "Bearer " + token}}))
+  }
+
+  fetchDataById(accountId: string): Promise<AccountTransaction[]> {
+    const token = this.getToken();
+    return firstValueFrom(this.http.get<AccountTransaction[]>(API_BASE_URL + 'transactions/by-account/' + accountId, {headers: {'Authorization': "Bearer " + token}}))
   }
 
   getToken(): string | null {

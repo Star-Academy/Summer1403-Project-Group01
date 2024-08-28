@@ -97,7 +97,7 @@
     }
   }
   #graph-container {
-    @apply self-stretch flex-grow m-8 rounded-xl;
+    @apply self-stretch flex-grow m-8 rounded-xl flex flex-row justify-center items-center;
     background-color: $secondary-color;
   }
 }

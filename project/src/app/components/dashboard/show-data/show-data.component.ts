@@ -59,6 +59,17 @@ export class ShowDataComponent {
   nodes: Node[] = [];
   links: Link[] = [];
 
+  element!: d3.Selection<SVGSVGElement, unknown, null, undefined>;
+  svgGroup!: d3.Selection<SVGGElement, unknown, null, undefined>;
+  simulation!: d3.Simulation<Node, undefined>;
+  link!: d3.Selection<SVGLineElement, Link, SVGGElement, unknown>;
+  linkLabelsAmount!: d3.Selection<SVGTextElement, Link, SVGGElement, unknown>;
+  linkLabelsDate!: d3.Selection<SVGTextElement, Link, SVGGElement, unknown>;
+  linkLabelsType!: d3.Selection<SVGTextElement, Link, SVGGElement, unknown>;
+  node!: d3.Selection<SVGCircleElement, Node, SVGGElement, unknown>;
+  nodeLabels!: d3.Selection<SVGTextElement, Node, SVGGElement, unknown>;
+
+
   @Output() dataGotEvent = new EventEmitter();
 
   @ViewChild('labelElement') labelElement!: ElementRef<HTMLLabelElement>;
@@ -67,6 +78,7 @@ export class ShowDataComponent {
   @ViewChild('dataElement') dataElement!: ElementRef<HTMLDivElement>;
   @ViewChild('graphElement') graphElement!: ElementRef<HTMLDivElement>;
   @ViewChild('contextElement') contextElement!: ElementRef<HTMLDivElement>;
+  @ViewChild('searchIdElement') searchIdElement!: ElementRef<HTMLInputElement>;
 
   constructor(private userService: UserService, private http: HttpClient, private fetchDataService: FetchDataService) {
     this.user = this.userService.getUser();
@@ -80,6 +92,51 @@ export class ShowDataComponent {
 
   handleDisabled(): boolean {
     return !(this?.inputElement?.nativeElement?.files && this?.inputElement?.nativeElement?.files?.length > 0);
+  }
+
+  clearGraphTable(): void {
+    d3.select(this.graphElement.nativeElement).selectAll('*').remove();
+  }
+
+  async handleGetUser() {
+    const response = await this.fetchDataService.fetchDataById(this.searchIdElement.nativeElement.value);
+    if (response.length === 0) {
+      this.graphElement.nativeElement.textContent = "داده ای یافت نشد!";
+      return;
+    }
+    this.nodes = [];
+    this.links = [];
+    this.clearGraphTable();
+    this.nodes.push({
+      x: 1,
+      y: 1,
+      vx: 1,
+      vy: 1,
+      label: Number(this.searchIdElement.nativeElement.value)
+    });
+    for (const item of response) {
+      if (!this.nodes.find(node => node.label === item.accountId)) {
+        this.nodes.push({
+          x: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].x + 1 : 1,
+          y: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].y + 1 : 1,
+          vx: 1,
+          vy: 1,
+          label: item.accountId,
+        });
+      }
+      this.links.push({
+        source: item.transactionWithSources[0].sourceAcount === item.accountId ?
+          this.nodes.find(node => node.label === item.accountId)!
+          : this.nodes.find(node => node.label === Number(this.searchIdElement.nativeElement.value))!,
+        target: item.transactionWithSources[0].sourceAcount === item.accountId ?
+          this.nodes.find(node => node.label === Number(this.searchIdElement.nativeElement.value))!
+          : this.nodes.find(node => node.label === item.accountId)!,
+        type: item.transactionWithSources[0].type,
+        amount: (new RialPipePipe()).transform(item.transactionWithSources[0].amount),
+        date: (new PersianDatePipe()).transform(item.transactionWithSources[0].date),
+      })
+    }
+    this.dataGotEvent.emit();
   }
 
   onSubmit(): void {
@@ -152,36 +209,51 @@ export class ShowDataComponent {
 
   @HostListener('dataGotEvent')
   handleGraph(): void {
-    const element = d3.select(this.graphElement.nativeElement)
+    this.element = d3.select(this.graphElement.nativeElement)
       .append('svg')
       .attr('width', this.graphElement.nativeElement.clientWidth)
       .attr('height', this.graphElement.nativeElement.clientHeight);
 
 
-    const svgGroup = element.append('g');
+    this.svgGroup = this.element.append('g');
 
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.5, 4])
       .on('zoom', (event) => {
-        svgGroup.attr('transform', event.transform);
+        this.svgGroup.attr('transform', event.transform);
       });
 
-    element.call(zoom);
+    this.element.call(zoom);
 
-    const simulation = d3.forceSimulation(this.nodes)
+    this.simulation = d3.forceSimulation(this.nodes)
       .force("link", d3.forceLink(this.links));
 
-    const link = svgGroup.append('g')
+    this.svgGroup.append('defs').append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '-0 -5 10 10')
+      .attr('refX', 13)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 12)
+      .attr('markerHeight', 12)
+      .attr('xoverflow', 'visible')
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .attr('fill', '#FDFDFD')
+      .style('stroke', 'none');
+
+    this.link = this.svgGroup.append('g')
       .attr('class', 'links')
       .selectAll('line')
       .data(this.links)
       .enter()
       .append('line')
       .attr('stroke-width', 2)
-      .attr('stroke', '#FDFDFD');
+      .attr('stroke', '#FDFDFD')
+      .attr('marker-end', 'url(#arrowhead)');
 
 
-    const linkLabelsAmount = svgGroup.append('g')
+    this.linkLabelsAmount = this.svgGroup.append('g')
       .attr('class', 'link-labels')
       .selectAll('text')
       .data(this.links)
@@ -192,7 +264,7 @@ export class ShowDataComponent {
       .attr('style', 'user-select: none;font-weight:bold;font-size:1.5rem;')
       .text((d: Link) => d.amount ? d.amount : "");
 
-    const linkLabelsType = svgGroup.append('g')
+    this.linkLabelsType = this.svgGroup.append('g')
       .attr('class', 'link-labels')
       .selectAll('text')
       .data(this.links)
@@ -203,7 +275,7 @@ export class ShowDataComponent {
       .attr('style', 'user-select: none;font-weight:bold;font-size:1.5rem;')
       .text((d: Link) => d.type ? d.type : "");
 
-    const linkLabelsDate = svgGroup.append('g')
+    this.linkLabelsDate = this.svgGroup.append('g')
       .attr('class', 'link-labels')
       .selectAll('text')
       .data(this.links)
@@ -214,7 +286,7 @@ export class ShowDataComponent {
       .attr('style', 'user-select: none;font-weight:bold;font-size:1.5rem;')
       .text((d: Link) => d.date ? d.date : "");
 
-    const node = svgGroup.append('g')
+    this.node = this.svgGroup.append('g')
       .attr('class', 'nodes')
       .selectAll('circle')
       .data(this.nodes)
@@ -223,12 +295,23 @@ export class ShowDataComponent {
       .attr('r', 10)
       .attr('fill', '#002B5B')
       .call(d3.drag<SVGCircleElement, Node>()
-        .on('start', dragStarted)
-        .on('drag', dragged)
-        .on('end', dragEnded)
+        .on('start', (event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) => {
+          if (!event.active) this.simulation.alphaTarget(0.3).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        })
+        .on('drag', (event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) => {
+          d.fx = event.x;
+          d.fy = event.y;
+        })
+        .on('end', (event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) => {
+          if (!event.active) this.simulation.alphaTarget(0);
+          d.fx = null;
+          d.fy = null;
+        })
       );
 
-    node.on('contextmenu', (event: MouseEvent, d: Node) => {
+    this.node.on('contextmenu', (event: MouseEvent, d: Node) => {
       event.preventDefault();
 
       this.contextElement.nativeElement.style.display = 'flex';
@@ -236,7 +319,7 @@ export class ShowDataComponent {
       this.contextElement.nativeElement.style.left = event.clientX + 'px';
     });
 
-    const nodeLabels = svgGroup.append('g')
+    this.nodeLabels = this.svgGroup.append('g')
       .attr('class', 'node-labels')
       .selectAll('text')
       .data(this.nodes)
@@ -248,59 +331,41 @@ export class ShowDataComponent {
       .attr('style', 'user-select: none;font-weight:bold;font-size:1.5rem;')
       .text((d: Node) => d.label ? d.label : "");
 
-    function ticked() {
-      link
+    this.simulation.on('tick', () => {
+      this.link
         .attr('x1', d => d.source.x)
         .attr('y1', d => d.source.y)
         .attr('x2', d => d.target.x)
         .attr('y2', d => d.target.y);
 
-      node
+      this.node
         .attr('cx', d => d.x)
         .attr('cy', d => d.y);
 
       // Update positions of node labels
-      nodeLabels
+      this.nodeLabels
         .attr('x', d => d.x)
         .attr('y', d => d.y);
 
       // Update positions of link labels
-      linkLabelsAmount
+      this.linkLabelsAmount
         .attr('x', d => ((d.source as Node).x + (d.target as Node).x) / 2)
         .attr('y', d => ((d.source as Node).y + (d.target as Node).y) / 2);
 
-      linkLabelsDate
+      this.linkLabelsDate
         .attr('x', d => ((d.source as Node).x + (d.target as Node).x) / 2)
         .attr('y', d => ((d.source as Node).y + (d.target as Node).y) / 2 + 20);
 
-      linkLabelsType
+      this.linkLabelsType
         .attr('x', d => ((d.source as Node).x + (d.target as Node).x) / 2)
         .attr('y', d => ((d.source as Node).y + (d.target as Node).y) / 2 + 40);
-    }
+    });
 
-    simulation.on('tick', ticked);
-
-    simulation
+    this.simulation
       .force('link', d3.forceLink(this.links).id((d, i) => i).distance(250))
       .force('charge', d3.forceManyBody().strength(-350))
       .force('center', d3.forceCenter(this.graphElement.nativeElement.clientWidth / 2, this.graphElement.nativeElement.clientHeight / 2));
 
-    function dragStarted(event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
-
-    function dragged(event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) {
-      d.fx = event.x;
-      d.fy = event.y;
-    }
-
-    function dragEnded(event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
   }
 
   handleCloseContext() {

@@ -15,7 +15,8 @@
   <button data-trigger-button class="show-button" (click)="showData()">نشان دادن داده ها به صورت جدول</button><hr />
   <div class="form-search-user">
     <label for="search-user">شماره حساب کاربر:</label>
-    <input id="search-user" type="search" placeholder="جستجو و نمایش گرافی داده های تراکنش یک کاربر" />
+    <input #searchIdElement id="search-user" type="search" placeholder="جستجو و نمایش گرافی داده های تراکنش یک کاربر" />
+    <button type="button" class="form-button" (click)="handleGetUser()">جستجو</button>
   </div>
   <div #dataElement class="table-container" appBlurClick (blurClick)="handleClose()">
     <ng-icon name="heroXMark" class="xicon" (click)="handleClose()"></ng-icon>
