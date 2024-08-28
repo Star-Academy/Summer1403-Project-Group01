@@ -1,8 +1,12 @@
 @import '../../../../variables';
 @layer components {
   .profile {
-    @apply border-y-2 p-12 rounded-3xl flex flex-col items-center gap-12;
-    border-color: $primary-color;
+    @apply p-12 rounded-3xl flex flex-col items-center gap-12;
+    background: $secondary-color;
+    color: #fdfdfd;
+    border-radius: 20px;
+    margin-inline: 50px;
+    height: 90vh;
   }
   .profile-name {
     @apply text-[8rem];

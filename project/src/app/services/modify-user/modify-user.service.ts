@@ -31,7 +31,7 @@ export class ModifyUserService {
 
   modifyUser(data: ChangeData): void {
     const token = this.getToken();
-    this.http.put<ChangeData>(API_BASE_URL + 'Profile/EditProfileInfo', data, {headers: {'Authorization': "Bearer " + token}})
+    this.http.put<ChangeData>(API_BASE_URL + 'profile/edit-info', data, {headers: {'Authorization': "Bearer " + token}})
       .subscribe(() => {
       const user = {
         firstName: data.firstName,
@@ -45,9 +45,22 @@ export class ModifyUserService {
 
   changePassword(data: ChangePassword): void {
     const token = this.getToken();
-    this.http.put(API_BASE_URL + 'Profile/ChangePassword', data, {headers: {'Authorization': "Bearer " + token}})
+    this.http.put(API_BASE_URL + 'profile/change-password', data, {headers: {'Authorization': "Bearer " + token}})
       .subscribe(response => {
         console.log(response);
       });
+  }
+
+  alterRole(userName: string, role: string): void {
+    const token = this.getToken();
+    const data = {
+      userName,
+      role
+    }
+
+    this.http.patch(API_BASE_URL + 'identity/change-role', data, {headers: {'Authorization': "Bearer " + token}})
+      .subscribe((response) => {
+        console.log(response);
+      })
   }
 }

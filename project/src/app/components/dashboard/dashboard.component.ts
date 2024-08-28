@@ -3,7 +3,8 @@ import {NavbarComponent} from "./navbar/navbar.component";
 import {RouterOutlet} from "@angular/router";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import { heroBars3, heroArrowUturnRight } from '@ng-icons/heroicons/outline'
-import {isPlatformBrowser} from "@angular/common";
+import {isPlatformBrowser, NgClass} from "@angular/common";
+import { BgGifComponent } from "../bg-gif/bg-gif.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -11,8 +12,10 @@ import {isPlatformBrowser} from "@angular/common";
   imports: [
     NavbarComponent,
     RouterOutlet,
-    NgIconComponent
-  ],
+    NgIconComponent,
+    NgClass,
+    BgGifComponent
+],
   providers: [provideIcons({heroBars3, heroArrowUturnRight})],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -71,5 +74,11 @@ constructor(private renderer: Renderer2, @Inject(PLATFORM_ID) private platform: 
     this.renderer.addClass(this.barsRef.nativeElement, 'block');
     this.renderer.setStyle(this.contentRef.nativeElement, 'inline-size', '99vw');
     this.renderer.setStyle(this.contentRef.nativeElement, 'display', 'flex');
+  }
+
+  isMenuOpen = false;
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

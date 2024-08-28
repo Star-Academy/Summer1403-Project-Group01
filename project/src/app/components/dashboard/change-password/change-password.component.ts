@@ -32,7 +32,7 @@ export class ChangePasswordComponent {
         newPassword: this.formGroup.value.newPassword
       }
       this.modifyService.changePassword(data);
-      this.router.navigate(['dashboard/profile'])
+      this.router.navigate(['dashboard/home'])
     } else {
       alert("مشکلی در ورودی های شما وجود دارد.")
     }
