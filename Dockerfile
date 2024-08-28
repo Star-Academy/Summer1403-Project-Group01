@@ -1,5 +1,7 @@
 # Stage 1: Base setup
-FROM node:20 AS base
+FROM node:20-slim AS base
+
+FROM base as test
 
 WORKDIR /app
 
@@ -21,7 +23,6 @@ RUN apt-get update && apt-get install -y \
 ENV CHROME_BIN="/usr/bin/google-chrome"
 
 # Stage 2: Test
-FROM base as test
 
 COPY /project/ .
 
@@ -29,6 +30,8 @@ RUN ng test --watch=false --browsers=ChromeHeadlessNoSandbox
 
 # Stage 3: Build
 FROM base as build
+
+WORKDIR /app
 
 COPY /project/ .
 
