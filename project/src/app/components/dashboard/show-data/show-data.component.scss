@@ -97,7 +97,7 @@
     }
   }
   #graph-container {
-    @apply self-stretch flex-grow m-8 rounded-xl flex flex-row justify-center items-center;
+    @apply relative self-stretch flex-grow m-8 rounded-xl flex flex-row justify-center items-center text-[3rem];
     background-color: $secondary-color;
   }
   .showUserContainer {
@@ -120,7 +120,11 @@
       }
     }
   }
+  .disabled {
+    @apply opacity-50 hover:cursor-none;
+  }
 }
+
 .context-menu-container {
   position: absolute;
 

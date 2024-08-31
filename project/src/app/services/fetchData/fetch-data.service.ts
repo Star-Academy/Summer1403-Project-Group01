@@ -3,27 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {isPlatformBrowser} from "@angular/common";
 import {API_BASE_URL} from "../../app.config";
 import {firstValueFrom} from "rxjs";
-
-interface Transaction {
-  TransactionId: number,
-  sourceAccountId: number,
-  destinationAccountId: number,
-  amount: number,
-  date: string,
-  type: string
-}
-
-interface AccountTransaction {
-  transactionWithSources: {
-    transactionID: number;
-    sourceAcount: number;
-    destiantionAccount: number;
-    amount: number;
-    date: string;
-    type: string;
-  }[];
-  accountId: number;
-}
+import {AccountTransaction, Transaction} from "../../interfaces/other";
 
 @Injectable({
   providedIn: 'root'
