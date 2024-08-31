@@ -39,6 +39,19 @@ interface Link {
   type: string;
 }
 
+interface Account {
+  "accountId": number,
+  "cardId": number,
+  "iban": string,
+  "accountType": string,
+  "branchTelephone": string,
+  "branchAddress": string,
+  "branchName": string,
+  "ownerName": string,
+  "ownerLastName": string,
+  "ownerId": number
+}
+
 @Component({
   selector: 'app-show-data',
   standalone: true,
@@ -58,6 +71,7 @@ export class ShowDataComponent {
   data: Transaction[] | undefined = undefined;
   nodes: Node[] = [];
   links: Link[] = [];
+  account: Account | undefined = undefined;
 
   element!: d3.Selection<SVGSVGElement, unknown, null, undefined>;
   svgGroup!: d3.Selection<SVGGElement, unknown, null, undefined>;
@@ -69,7 +83,6 @@ export class ShowDataComponent {
   node!: d3.Selection<SVGCircleElement, Node, SVGGElement, unknown>;
   nodeLabels!: d3.Selection<SVGTextElement, Node, SVGGElement, unknown>;
 
-
   @Output() dataGotEvent = new EventEmitter();
 
   @ViewChild('labelElement') labelElement!: ElementRef<HTMLLabelElement>;
@@ -79,6 +92,7 @@ export class ShowDataComponent {
   @ViewChild('graphElement') graphElement!: ElementRef<HTMLDivElement>;
   @ViewChild('contextElement') contextElement!: ElementRef<HTMLDivElement>;
   @ViewChild('searchIdElement') searchIdElement!: ElementRef<HTMLInputElement>;
+  @ViewChild('userContainer') userElement!: ElementRef<HTMLDivElement>;
 
   constructor(private userService: UserService, private http: HttpClient, private fetchDataService: FetchDataService) {
     this.user = this.userService.getUser();
@@ -99,14 +113,18 @@ export class ShowDataComponent {
   }
 
   async handleGetUser() {
+    this.nodes = [];
+    this.links = [];
+    this.clearGraphTable();
+    if (this.searchIdElement.nativeElement.value === '') {
+      await this.getAllData();
+      return;
+    }
     const response = await this.fetchDataService.fetchDataById(this.searchIdElement.nativeElement.value);
     if (response.length === 0) {
       this.graphElement.nativeElement.textContent = "داده ای یافت نشد!";
       return;
     }
-    this.nodes = [];
-    this.links = [];
-    this.clearGraphTable();
     this.nodes.push({
       x: 1,
       y: 1,
@@ -175,6 +193,10 @@ export class ShowDataComponent {
   }
 
   async ngOnInit() {
+    await this.getAllData();
+  }
+
+  async getAllData(): Promise<void> {
     const response = await this.fetchDataService.fetchData();
     this.data = response;
     for (const trans of response) {
@@ -314,6 +336,13 @@ export class ShowDataComponent {
     this.node.on('contextmenu', (event: MouseEvent, d: Node) => {
       event.preventDefault();
 
+      const token = this.getToken();
+
+      this.http.get<Account>(API_BASE_URL + `accounts/${d.label}`, {headers: {'Authorization': "Bearer " + token}})
+        .subscribe((res) => {
+        this.account = res;
+      });
+
       this.contextElement.nativeElement.style.display = 'flex';
       this.contextElement.nativeElement.style.top = event.clientY + 'px';
       this.contextElement.nativeElement.style.left = event.clientX + 'px';
@@ -370,5 +399,13 @@ export class ShowDataComponent {
 
   handleCloseContext() {
     this.contextElement.nativeElement.style.display = 'none';
+  }
+
+  handleShowUser() {
+    this.userElement.nativeElement.style.display = 'flex';
+  }
+
+  handleCloseUser() {
+    this.userElement.nativeElement.style.display = 'none';
   }
 }
