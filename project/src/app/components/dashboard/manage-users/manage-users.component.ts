@@ -39,7 +39,7 @@ export class ManageUsersComponent {
 
   ngOnInit(): void {
     const token = this.getToken();
-    this.http.get<User[]>(API_BASE_URL + 'identity', {headers: {'Authorization': "bearer " + token}})
+    this.http.get<User[]>(API_BASE_URL + 'users', {headers: {'Authorization': "bearer " + token}})
       .subscribe((response) => {
       this.users = response;
       this.finalUsers = response;
@@ -83,7 +83,7 @@ export class ManageUsersComponent {
         role: this.formGroup.value.role,
       }
       const token = this.getToken();
-      this.http.post<User>(API_BASE_URL + 'identity/signup', data, {headers: {'Authorization': "Bearer " + token}})
+      this.http.post<User>(API_BASE_URL + 'users/signup', data, {headers: {'Authorization': "Bearer " + token}})
         .subscribe((res) => {
           this.finalUsers?.push(res);
           this.handleClose();

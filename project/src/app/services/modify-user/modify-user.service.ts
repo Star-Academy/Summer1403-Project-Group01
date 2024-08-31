@@ -58,7 +58,7 @@ export class ModifyUserService {
       role
     }
 
-    this.http.patch(API_BASE_URL + 'identity/change-role', data, {headers: {'Authorization': "Bearer " + token}})
+    this.http.patch(API_BASE_URL + 'users/change-role', data, {headers: {'Authorization': "Bearer " + token}})
       .subscribe((response) => {
         console.log(response);
       })

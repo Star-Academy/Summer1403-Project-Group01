@@ -100,6 +100,26 @@
     @apply self-stretch flex-grow m-8 rounded-xl flex flex-row justify-center items-center;
     background-color: $secondary-color;
   }
+  .showUserContainer {
+    @apply hidden flex-row justify-center items-center absolute text-[2rem] rounded-2xl;
+    background-color: $primary-color;
+    color: $bg-color;
+
+    inline-size: 85rem;
+    block-size: 60rem;
+
+    inset-inline-end: calc(50vw - 42.5rem);
+    inset-block-start: calc(50vh - 30rem);
+
+    table {
+      @apply table-auto border-4;
+      border-color: $text-color;
+
+      td {
+        @apply p-3;
+      }
+    }
+  }
 }
 .context-menu-container {
   position: absolute;

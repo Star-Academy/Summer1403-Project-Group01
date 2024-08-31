@@ -47,9 +47,58 @@
   </div>
   <div id="graph-container" #graphElement></div>
 </section>
+
 <div #contextElement class="context-menu-container" appBlurClick (blurClick)="handleCloseContext()">
   <ul>
-    <li>نمایش کاربر</li>
+    <li (click)="handleShowUser()" data-trigger-button>نمایش کاربر</li>
     <li>افزایش تراکنش ها</li>
   </ul>
+</div>
+
+<div class="showUserContainer" #userContainer appBlurClick (blurClick)="handleCloseUser()">
+    <ng-icon (click)="handleCloseUser()" name="heroXMark" class="xicon"></ng-icon>
+    <table>
+      <tbody>
+        <tr>
+          <td>ایدی حساب:</td>
+          <td>{{ account?.accountId }}</td>
+        </tr>
+        <tr>
+          <td>شماره کارت:</td>
+          <td>{{ account?.cardId }}</td>
+        </tr>
+        <tr>
+          <td>شماره شبا:</td>
+          <td>{{ account?.iban }}</td>
+        </tr>
+        <tr>
+          <td>نوع حساب:</td>
+          <td>{{ account?.accountType }}</td>
+        </tr>
+        <tr>
+          <td>شماره تلفن شعبه:</td>
+          <td>{{ account?.branchTelephone }}</td>
+        </tr>
+        <tr>
+          <td>ادرس شعبه:</td>
+          <td>{{ account?.branchAddress }}</td>
+        </tr>
+        <tr>
+          <td>شعبه:</td>
+          <td>{{ account?.branchName }}</td>
+        </tr>
+        <tr>
+          <td>نام صاحب حساب:</td>
+          <td>{{ account?.ownerName }}</td>
+        </tr>
+        <tr>
+          <td>نام خانوادگی صاحب حساب:</td>
+          <td>{{ account?.ownerLastName }}</td>
+        </tr>
+        <tr>
+          <td>کد ملی صاحب حساب:</td>
+          <td>{{ account?.ownerId }}</td>
+        </tr>
+      </tbody>
+    </table>
 </div>
