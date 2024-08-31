@@ -51,7 +51,7 @@
 <div #contextElement class="context-menu-container" appBlurClick (blurClick)="handleCloseContext()">
   <ul>
     <li (click)="handleShowUser()" data-trigger-button>نمایش کاربر</li>
-    <li>افزایش تراکنش ها</li>
+    <li (click)="handleExpandGraph()">گسترش تراکنش ها</li>
   </ul>
 </div>
 

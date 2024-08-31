@@ -11,46 +11,7 @@ import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import {BlurClickDirective} from "../../../directives/blur-click.directive";
 import * as d3 from 'd3';
 import {FetchDataService} from "../../../services/fetchData/fetch-data.service";
-
-interface Transaction {
-  TransactionId: number,
-  sourceAccountId: number,
-  destinationAccountId: number,
-  amount: number,
-  date: string,
-  type: string
-}
-
-interface Node {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  fx?: number | null;
-  fy?: number | null;
-  label: string | number;
-}
-
-interface Link {
-  source: Node;
-  target: Node;
-  date: string;
-  amount: string;
-  type: string;
-}
-
-interface Account {
-  "accountId": number,
-  "cardId": number,
-  "iban": string,
-  "accountType": string,
-  "branchTelephone": string,
-  "branchAddress": string,
-  "branchName": string,
-  "ownerName": string,
-  "ownerLastName": string,
-  "ownerId": number
-}
+import {Account, Link, Transaction, Node} from "../../../interfaces/other";
 
 @Component({
   selector: 'app-show-data',
@@ -72,10 +33,11 @@ export class ShowDataComponent {
   nodes: Node[] = [];
   links: Link[] = [];
   account: Account | undefined = undefined;
+  graphRendered = false;
 
   element!: d3.Selection<SVGSVGElement, unknown, null, undefined>;
   svgGroup!: d3.Selection<SVGGElement, unknown, null, undefined>;
-  simulation!: d3.Simulation<Node, undefined>;
+  simulation!: d3.Simulation<Node, Link>;
   link!: d3.Selection<SVGLineElement, Link, SVGGElement, unknown>;
   linkLabelsAmount!: d3.Selection<SVGTextElement, Link, SVGGElement, unknown>;
   linkLabelsDate!: d3.Selection<SVGTextElement, Link, SVGGElement, unknown>;
@@ -83,7 +45,7 @@ export class ShowDataComponent {
   node!: d3.Selection<SVGCircleElement, Node, SVGGElement, unknown>;
   nodeLabels!: d3.Selection<SVGTextElement, Node, SVGGElement, unknown>;
 
-  @Output() dataGotEvent = new EventEmitter();
+  @Output() dataGotEvent = new EventEmitter<string>();
 
   @ViewChild('labelElement') labelElement!: ElementRef<HTMLLabelElement>;
   @ViewChild('inputElement') inputElement!: ElementRef<HTMLInputElement>;
@@ -154,7 +116,8 @@ export class ShowDataComponent {
         date: (new PersianDatePipe()).transform(item.transactionWithSources[0].date),
       })
     }
-    this.dataGotEvent.emit();
+    this.searchIdElement.nativeElement.value = "";
+    this.dataGotEvent.emit("none-all");
   }
 
   onSubmit(): void {
@@ -226,16 +189,30 @@ export class ShowDataComponent {
         amount: (new RialPipePipe()).transform(trans.amount),
       });
     }
-    this.dataGotEvent.emit();
+    this.dataGotEvent.emit("all");
   }
 
-  @HostListener('dataGotEvent')
-  handleGraph(): void {
+  @HostListener('dataGotEvent', ['$event'])
+  handleGraph(callType: string): void {
+    this.graphRendered = false;
+    this.graphElement.nativeElement.textContent = "";
     this.element = d3.select(this.graphElement.nativeElement)
       .append('svg')
       .attr('width', this.graphElement.nativeElement.clientWidth)
       .attr('height', this.graphElement.nativeElement.clientHeight);
 
+    d3.select(this.graphElement.nativeElement)
+      .append('pre')
+      .text("برای انحام اعمال خاص بر روی هر راس راست کلیک کنید.\n" +
+        "برای گسترش گراف در حالت جستجو شده، باید تا اتمام ساخت گراف\n (رندر و ری-رندر شدن آن) صبر کنید.")
+      .attr("style", "" +
+        "position: absolute;" +
+        "inset-inline-start: 0.25rem;" +
+        "inset-block-start: 0.25rem;" +
+        "color: #172535;" +
+        "z-index: 10;" +
+        "font-size: 1.8rem;" +
+        "opacity: 0.7;");
 
     this.svgGroup = this.element.append('g');
 
@@ -319,6 +296,7 @@ export class ShowDataComponent {
       .call(d3.drag<SVGCircleElement, Node>()
         .on('start', (event: d3.D3DragEvent<SVGCircleElement, Node, Node>, d: Node) => {
           if (!event.active) this.simulation.alphaTarget(0.3).restart();
+          this.graphRendered = false;
           d.fx = d.x;
           d.fy = d.y;
         })
@@ -346,6 +324,14 @@ export class ShowDataComponent {
       this.contextElement.nativeElement.style.display = 'flex';
       this.contextElement.nativeElement.style.top = event.clientY + 'px';
       this.contextElement.nativeElement.style.left = event.clientX + 'px';
+
+      const expandButton = this.contextElement.nativeElement.querySelector('ul > li:last-child');
+      expandButton?.classList.add("disabled");
+      if (callType === "all") {
+        expandButton?.setAttribute("style", "display: none;");
+      } else {
+        expandButton?.setAttribute("style", "display: block;");
+      }
     });
 
     this.nodeLabels = this.svgGroup.append('g')
@@ -393,7 +379,12 @@ export class ShowDataComponent {
     this.simulation
       .force('link', d3.forceLink(this.links).id((d, i) => i).distance(250))
       .force('charge', d3.forceManyBody().strength(-350))
-      .force('center', d3.forceCenter(this.graphElement.nativeElement.clientWidth / 2, this.graphElement.nativeElement.clientHeight / 2));
+      .force('center', d3.forceCenter(this.graphElement.nativeElement.clientWidth / 2, this.graphElement.nativeElement.clientHeight / 2))
+      .on("end", () => {
+        this.graphRendered = true;
+        const expandButton = this.contextElement.nativeElement.querySelector('ul > li:last-child');
+        expandButton?.classList.remove("disabled");
+      });
 
   }
 
@@ -407,5 +398,39 @@ export class ShowDataComponent {
 
   handleCloseUser() {
     this.userElement.nativeElement.style.display = 'none';
+  }
+
+  async handleExpandGraph(): Promise<void> {
+    if (!this.graphRendered) return;
+    const newData = await this.fetchDataService.fetchDataById(String(this.account?.accountId));
+    this.clearGraphTable();
+    for (const item of newData) {
+      if (!this.nodes.find(node => node.label === item.accountId)) {
+        this.nodes.push({
+          index: this.nodes.length,
+          x: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].x + 1 : 1,
+          y: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].y + 1 : 1,
+          vx: 1,
+          vy: 1,
+          label: item.accountId,
+        });
+      }
+      if (!this.links.find(link => link.source.label === item.accountId && link.target.label === this.account?.accountId) &&
+          !this.links.find(link => link.source.label === this.account?.accountId && link.target.label === item.accountId)) {
+        this.links.push({
+          index: this.links.length,
+          source: item.transactionWithSources[0].sourceAcount === item.accountId ?
+            this.nodes.find(node => node.label === item.accountId)!
+            : this.nodes.find(node => node.label === this.account?.accountId)!,
+          target: item.transactionWithSources[0].sourceAcount === item.accountId ?
+            this.nodes.find(node => node.label === this.account?.accountId)!
+            : this.nodes.find(node => node.label === item.accountId)!,
+          type: item.transactionWithSources[0].type,
+          amount: (new RialPipePipe()).transform(item.transactionWithSources[0].amount),
+          date: (new PersianDatePipe()).transform(item.transactionWithSources[0].date),
+        });
+      }
+    }
+    this.dataGotEvent.emit("none-all");
   }
 }
