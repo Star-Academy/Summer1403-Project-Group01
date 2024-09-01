@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ModifyUserService} from "../../../services/modify-user/modify-user.service";
+import {ModifyUserService} from "../../../../services/modify-user/modify-user.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
+import {NgIconComponent, provideIcons} from "@ng-icons/core";
+import { heroXMark } from '@ng-icons/heroicons/outline';
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NgIconComponent],
   templateUrl: './change-password.component.html',
-  styleUrl: './change-password.component.scss'
+  styleUrl: './change-password.component.scss',
+  providers: [provideIcons(({heroXMark}))]
 })
 export class ChangePasswordComponent {
   formGroup = new FormGroup({
@@ -32,9 +35,13 @@ export class ChangePasswordComponent {
         newPassword: this.formGroup.value.newPassword
       }
       this.modifyService.changePassword(data);
-      this.router.navigate(['dashboard/home'])
+      this.router.navigate(['dashboard/profile'])
     } else {
       alert("مشکلی در ورودی های شما وجود دارد.")
     }
+  }
+
+  handleClose(): void {
+    this.router.navigateByUrl('dashboard/profile')
   }
 }

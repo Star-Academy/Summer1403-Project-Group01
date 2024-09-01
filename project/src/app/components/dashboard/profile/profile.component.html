@@ -2,7 +2,7 @@
   <h2 class="profile-name">
     <span>نام و نام خانوادگی:</span>
     <span>{{ user?.firstName }}</span>
-    <span>{{ user?.lastName }}</span>  
+    <span>{{ user?.lastName }}</span>
   </h2>
   <h3 class="profile-username">
     <span>
@@ -32,14 +32,15 @@
     }
   </div>
   <ul>
-    <li routerLink="change-password" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">  
+    <li routerLink="change-password" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
       <span>عوض کردن گذرواژه</span>
     </li>
     <li routerLink="edit-profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-item">
       <span>ادیت کردن پروفایل</span>
     </li>
-    <li (click)="handleLogout()" class="navbar-item">  
+    <li (click)="handleLogout()" class="navbar-item">
       <span>خروج از حساب</span>
     </li>
   </ul>
 </div>
+<router-outlet></router-outlet>

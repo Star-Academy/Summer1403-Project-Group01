@@ -54,7 +54,7 @@
     }
   }
   .table-container {
-    @apply absolute p-6 justify-center items-center rounded-2xl hidden text-[1.5rem] overflow-auto;
+    @apply absolute p-6 justify-center items-center rounded-2xl hidden text-[1.5rem] overflow-auto z-20;
     background-color: $primary-color;
     color: $bg-color;
 
@@ -83,10 +83,6 @@
       border-color: $bg-color;
     }
   }
-  .xicon {
-    @apply absolute w-[4rem] h-[4rem] top-0 right-0;
-    color: $bg-color;
-  }
   .form-search-user {
     @apply text-[2rem] self-center border rounded-2xl transition-all duration-300 ease-in-out p-4 flex flex-row
       gap-4 items-center;
@@ -101,7 +97,7 @@
     background-color: $secondary-color;
   }
   .showUserContainer {
-    @apply hidden flex-row justify-center items-center absolute text-[2rem] rounded-2xl;
+    @apply hidden flex-row justify-center items-center absolute text-[2rem] rounded-2xl z-30;
     background-color: $primary-color;
     color: $bg-color;
 
