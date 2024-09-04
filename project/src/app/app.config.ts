@@ -13,4 +13,4 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch())],
 };
 
-export const API_BASE_URL: string = 'https://backend.abriment.com/';
+export const API_BASE_URL: string = 'https://mybackend.abriment.com/';
