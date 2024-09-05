@@ -3,27 +3,27 @@
 @layer components {
   
   .navbar-list {
-    @apply flex flex-col justify-start  gap-[20px] p-[1.5rem] w-full self-center ;
+    @apply flex flex-col justify-start  gap-[2rem] p-[1.5rem] w-full self-center ;
     background-color: $primary-color;
     height: 90%;
     border-radius: 20px 0 0px 20px;
 
     .logo{ 
-      height: 210px;
+      height: 20rem;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 25px;
+      gap: 2rem;
       p{
         color: $bg-color;
-        font-size: 32px;
+        font-size: 3rem;
       }
       svg{
-        height: 50px;
+        height: 6rem;
         fill: #fdfdfd;
-        width: 50px;
-        padding: 5px;
+        width: 6rem;
+        padding: 1rem;
       }
   }
   }
@@ -33,7 +33,7 @@
 
     background-color: $primary-color;
     border: 3px solid $primary-color;
-    height: 65px;
+    height:10%;
     display: grid;
     grid-template-columns: 1fr 5fr 1fr;
     align-items: center;

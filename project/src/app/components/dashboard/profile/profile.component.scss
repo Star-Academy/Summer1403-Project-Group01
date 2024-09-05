@@ -42,16 +42,7 @@
     }
 
   }
-.span-title{
-  color: #9d9d9d;
-  font-size: 2rem;
-  padding-left: 15px;
-}
 
-  .profile-text {
-    @apply text-[2.5rem];
-    letter-spacing: 1px;
-  }
   .profile-role-container {
     @apply flex flex-row justify-start items-center gap-[1rem] self-stretch;
     width: 70%;
@@ -73,8 +64,8 @@
     color: $secondary-color;
     background-color: $primary-color;
     border: 3px solid $secondary-color;
-    height: 65px;
-    width: 200px;
+    height: 40%;
+    width: 19rem  ;
     justify-content: center;
     display: flex;
     align-items: center;
@@ -90,6 +81,14 @@
       &:hover {
         color: $bg-color
       }
+    }
+  }
+  .active {
+    background: $secondary-color;
+    color: $bg-color;
+    
+    &:hover {
+      color: $bg-color
     }
   }
   .ex {

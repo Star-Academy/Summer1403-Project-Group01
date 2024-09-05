@@ -9,11 +9,13 @@ import {ManageUsersComponent} from "./components/dashboard/manage-users/manage-u
 import {ShowDataComponent} from "./components/dashboard/show-data/show-data.component";
 import {isAdminGuard} from "./guards/admin/is-admin.guard";
 import { DashboardhomeComponent } from './components/dashboard/dashboardhome/dashboardhome.component';
+import { ProfileShowComponent } from './components/dashboard/profile-show/profile-show.component';
 
 export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, children: [
       {path: 'home', component: DashboardhomeComponent},
       {path: 'profile', component: ProfileComponent , children: [
+        {path: 'main', component: ProfileShowComponent},
         {path: 'edit-profile', component: EditProfileComponent},
         {path: 'change-password', component: ChangePasswordComponent},
       ]},
