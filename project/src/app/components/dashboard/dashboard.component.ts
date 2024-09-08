@@ -21,7 +21,7 @@ import { BgGifComponent } from "../bg-gif/bg-gif.component";
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-  navbarOpen: boolean = false;
+  navbarOpen = false;
   isBrowser!: boolean;
   screenWidth!: number;
   @ViewChild('navbar') navbarElement!: ElementRef<HTMLElement>;

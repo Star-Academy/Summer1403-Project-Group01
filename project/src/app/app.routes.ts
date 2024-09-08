@@ -9,9 +9,10 @@ import {ManageUsersComponent} from "./components/dashboard/manage-users/manage-u
 import {ShowDataComponent} from "./components/dashboard/show-data/show-data.component";
 import {isAdminGuard} from "./guards/admin/is-admin.guard";
 import { DashboardhomeComponent } from './components/dashboard/dashboardhome/dashboardhome.component';
+import {forwardRef} from "@angular/core";
 
 export const routes: Routes = [
-  {path: 'dashboard', component: DashboardComponent, children: [
+  {path: 'dashboard', component: forwardRef(() => DashboardComponent), children: [
       {path: 'home', component: DashboardhomeComponent},
       {path: 'profile', component: ProfileComponent , children: [
         {path: 'edit-profile', component: EditProfileComponent},

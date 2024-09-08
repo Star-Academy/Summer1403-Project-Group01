@@ -23,7 +23,7 @@
       />
       <label for="password">رمز عبور</label>
     </div>
-    <button class="form-button">
+    <button type="submit" class="form-button">
       <ng-icon name="heroArrowLeftEndOnRectangle"></ng-icon>
       ورود به کد استار
     </button>
@@ -105,13 +105,13 @@
             [type]="inputType"
             placeholder="رمز عبور"
             formControlName="password"
-          />  
+          />
           <label for="password-lg">رمز عبور</label>
           <ng-icon class="cursor-pointer" name="heroEyeSlash" [hidden]="eyeclose" (click)="changeEyes()"></ng-icon>
           <ng-icon class="cursor-pointer" name="heroEye" [hidden]="!eyeclose" (click)="changeEyes()"></ng-icon>
-          
+
         </div>
-        <button class="form-button">
+        <button type="submit" class="form-button">
           <ng-icon name="heroArrowLeftEndOnRectangle"></ng-icon>
           ورود به کد استار
         </button>

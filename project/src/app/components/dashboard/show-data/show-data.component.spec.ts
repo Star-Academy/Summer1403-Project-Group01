@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShowDataComponent } from './show-data.component';
+import {provideHttpClient} from "@angular/common/http";
 
 describe('ShowDataComponent', () => {
   let component: ShowDataComponent;
@@ -8,7 +9,8 @@ describe('ShowDataComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ShowDataComponent]
+      imports: [ShowDataComponent],
+      providers: [provideHttpClient()]
     })
     .compileComponents();
 

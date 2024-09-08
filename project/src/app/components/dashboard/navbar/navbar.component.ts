@@ -27,9 +27,6 @@ export class NavbarComponent {
     this.user = this.userService.getUser();
   }
 
-  handleLogout() {
-    this.userService.logout();
-  }
   isActive(route: string): boolean {
     return this.location.path() ===  '/dashboard/' + route;
   }

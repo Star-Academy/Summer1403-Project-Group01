@@ -32,8 +32,9 @@ export class LoginComponent {
       alert(JSON.stringify(this.formGroup.value));
     }
   }
+
   changeEyes(){
-    this.eyeclose= !this.eyeclose 
+    this.eyeclose= !this.eyeclose
     if (!this.eyeclose) {
       this.inputType = 'password'
     }
