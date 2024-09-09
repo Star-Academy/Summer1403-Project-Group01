@@ -1,0 +1,14 @@
+@import '../../../../variables';
+@layer components {
+.span-title{
+    color: #9d9d9d;
+    font-size: 2rem;
+    padding-left: 15px;
+  }
+  
+    .profile-text {
+      @apply text-[2.5rem];
+      letter-spacing: 1px;
+    }
+    
+}
