@@ -18,4 +18,4 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 
-export const API_BASE_URL = 'http://external.abriment.com:30080/';
+export const API_BASE_URL = 'https://mybackend.abriment.com/';
