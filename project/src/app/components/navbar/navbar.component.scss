@@ -1,39 +1,39 @@
-@import '../../../../variables';
+@import '../../../variables';
 
 @layer components {
-  
+
   .navbar-list {
-    @apply flex flex-col justify-start  gap-[20px] p-[1.5rem] w-full self-center ;
+    @apply flex flex-col justify-start  gap-[2rem] p-[1.5rem] w-full self-center ;
     background-color: $primary-color;
     height: 90%;
     border-radius: 20px 0 0px 20px;
 
-    .logo{ 
-      height: 210px;
+    .logo{
+      height: 20rem;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 25px;
+      gap: 2rem;
       p{
         color: $bg-color;
-        font-size: 32px;
+        font-size: 3rem;
       }
       svg{
-        height: 50px;
+        height: 6rem;
         fill: #fdfdfd;
-        width: 50px;
-        padding: 5px;
+        width: 6rem;
+        padding: 1rem;
       }
   }
-}
+  }
   .navbar-item {
     @apply text-[2rem] hover:cursor-pointer transition-all delay-75 ease-in-out  rounded-2xl;
     color: $secondary-color;
 
     background-color: $primary-color;
     border: 3px solid $primary-color;
-    height: 65px;
+    height:10%;
     display: grid;
     grid-template-columns: 1fr 5fr 1fr;
     align-items: center;
@@ -62,14 +62,14 @@
   .active {
     background: $secondary-color;
     color: $bg-color;
-    
+
     &:hover {
       color: $bg-color
     }
-    
+
     .heroArrowLeft {
       display: none;
     }
   }
-  
+
 }

@@ -1,25 +1,18 @@
 import { Routes } from '@angular/router';
-import {DashboardComponent} from "./components/dashboard/dashboard.component";
-import {LoginComponent} from "./components/login/login.component";
 import {loggedInGuard} from "./guards/loggedIn/logged-in.guard";
-import {ProfileComponent} from "./components/dashboard/profile/profile.component";
-import {EditProfileComponent} from "./components/dashboard/profile/edit-profile/edit-profile.component";
-import {ChangePasswordComponent} from "./components/dashboard/profile/change-password/change-password.component";
-import {ManageUsersComponent} from "./components/dashboard/manage-users/manage-users.component";
-import {ShowDataComponent} from "./components/dashboard/show-data/show-data.component";
 import {isAdminGuard} from "./guards/admin/is-admin.guard";
-import { DashboardhomeComponent } from './components/dashboard/dashboardhome/dashboardhome.component';
 
 export const routes: Routes = [
-  {path: 'dashboard', component: DashboardComponent, children: [
-      {path: 'home', component: DashboardhomeComponent},
-      {path: 'profile', component: ProfileComponent , children: [
-        {path: 'edit-profile', component: EditProfileComponent},
-        {path: 'change-password', component: ChangePasswordComponent},
+  {path: 'dashboard', loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent), children: [
+      {path: 'home', loadComponent: () => import('./components/dashboard/dashboardhome/dashboardhome.component').then(m => m.DashboardhomeComponent)},
+      {path: 'profile', loadComponent: () => import('./components/dashboard/profile/profile.component').then(m => m.ProfileComponent) , children: [
+        {path: 'main', loadComponent: () => import('./components/dashboard/profile-show/profile-show.component').then(m => m.ProfileShowComponent)},
+        {path: 'edit-profile', loadComponent: () => import('./components/dashboard/profile/edit-profile/edit-profile.component').then(m => m.EditProfileComponent)},
+        {path: 'change-password', loadComponent: () => import('./components/dashboard/profile/change-password/change-password.component').then(m => m.ChangePasswordComponent)},
       ]},
-      {path: 'manage-users', component: ManageUsersComponent, canActivate: [isAdminGuard]},
-      {path: 'show-data', component: ShowDataComponent},
+      {path: 'manage-users', loadComponent: () => import('./components/dashboard/manage-users/manage-users.component').then(m => m.ManageUsersComponent), canActivate: [isAdminGuard]},
+      {path: 'show-data', loadComponent: () => import('./components/dashboard/show-data/show-data.component').then(m => m.ShowDataComponent)},
     ], canActivate: [loggedInGuard], data: { requiresAuth: true } },
-  {path: 'login', component: LoginComponent, canActivate: [loggedInGuard], data: { requiresAuth: false }},
+  {path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent), canActivate: [loggedInGuard], data: { requiresAuth: false }},
   {path: '**', redirectTo: 'dashboard'}
 ];

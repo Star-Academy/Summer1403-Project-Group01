@@ -1,25 +1,50 @@
 <section class="data-show-container">
   @if (user?.role?.toLowerCase() === "admin" || user?.role?.toLowerCase() === "dataadmin") {
     <form (submit)="onSubmit()" class="upload-form">
-      <label for="type">نوع فایل:</label>
-      <select #selectElement id="type" class="select-group">
-        <option value="transaction">تراکنش ها</option>
-        <option value="account">هویت ها</option>
-      </select>
-      <label #labelElement for="upload-input" class="input-label">برای انتخاب فایل کلیک کنید</label>
-      <input #inputElement id="upload-input" class="upload-input" type="file" [multiple]="false" accept="text/csv" (change)="handleChange()" />
+      <p>
+        برای انتخاب فایل هویت ها
+        <label #labelAccountsElement for="upload-input-accounts" class="input-label">اینجا</label>
+        و برای انتخاب فایل تراکنش ها
+        <label #labelTransactionsElement for="upload-input-transactions" class="input-label">اینجا</label>
+        کلیک کنید.
+      </p>
+      <input #inputAccountsElement id="upload-input-accounts" class="upload-input" type="file" [multiple]="false"
+             accept="text/csv" (change)="handleChange()" />
+      <input #inputTransactionsElement id="upload-input-transactions" class="upload-input" type="file" [multiple]="false"
+             accept="text/csv" (change)="handleChange()" />
       <button class="form-button" type="submit" [disabled]="handleDisabled()">آپلود کردن فایل</button>
     </form>
   }
 
-  <button data-trigger-button class="show-button" (click)="showData()">نشان دادن داده ها به صورت جدول</button><hr />
+  <div class="flex flex-row gap-4">
+    <button data-trigger-button class="show-button" (click)="showData('transactions')">نشان دادن تراکنش ها به صورت جدول</button>
+    <button data-trigger-button class="show-button" (click)="showData('accounts')">نشان دادن هویت ها به صورت جدول</button>
+    <div class="dropdown">
+      <button class="show-button flex flex-row items-center gap-2"
+              (click)="handleShowFiles()"
+              data-trigger-button
+      >
+        فایل های موجود
+        <ng-icon name="heroChevronDown"></ng-icon>
+      </button>
+      <ul #filesElement appBlurClick (blurClick)="closeShowFiles()" class="dropdown-content">
+        @for (fileId of fileIds; track fileId.id) {
+          <li class="dropdown-element">
+            <button [id]="fileId.id" (click)="handleUpdateFileData($event)">داده های شماره {{ fileId.id }}</button>
+            <button [id]="fileId.id" (click)="handleDeleteFile($event)">حذف</button></li>
+        }
+      </ul>
+    </div>
+    <button data-trigger-button class="show-button" (click)="handleGraph()">نمایش گراف</button>
+    <button data-trigger-button class="show-button danger" (click)="clearGraphTable()">پاک کردن گراف</button>
+  </div><hr />
   <div class="form-search-user">
     <label for="search-user">شماره حساب کاربر:</label>
     <input #searchIdElement id="search-user" type="search" placeholder="جستجو و نمایش گرافی داده های تراکنش یک کاربر" />
     <button type="button" class="form-button" (click)="handleGetUser()">جستجو</button>
   </div>
-  <div #dataElement class="table-container" appBlurClick (blurClick)="handleClose()">
-    <ng-icon name="heroXMark" class="xicon" (click)="handleClose()"></ng-icon>
+  <div #dataElement class="table-container" appBlurClick (blurClick)="handleClose('transactions')">
+    <ng-icon name="heroXMark" class="xicon" (click)="handleClose('transactions')"></ng-icon>
     <table class="table">
       <thead>
         <tr>
@@ -28,16 +53,55 @@
           <th>مبلغ تراکنش</th>
           <th>تاریخ</th>
           <th>نوع تراکنش</th>
+          <th>ایدیِ پیدا کردن</th>
         </tr>
       </thead>
       <tbody>
-        @for (trans of data; track trans.TransactionId) {
+        @for (trans of data; track trans.transactionId) {
           <tr>
             <td>{{ trans.sourceAccountId }}</td>
             <td>{{ trans.destinationAccountId }}</td>
             <td>{{ trans.amount | rialPipe }}</td>
             <td>{{ trans.date | persianDate }}</td>
             <td>{{ trans.type }}</td>
+            <td>{{ trans.trackingId }}</td>
+          </tr>
+        } @empty {
+          <h4>هیچ داده ای برای نمایش یافت نشد.</h4>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div #accountDataElement class="table-container account-table" appBlurClick (blurClick)="handleClose('accounts')">
+    <ng-icon name="heroXMark" class="xicon" (click)="handleClose('accounts')"></ng-icon>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ایدی حساب:</th>
+        <th>شماره کارت:</th>
+        <th>شماره شبا:</th>
+        <th>نوع حساب:</th>
+        <th>شماره تلفن شعبه:</th>
+        <th>ادرس شعبه:</th>
+        <th>شعبه:</th>
+        <th>نام صاحب حساب:</th>
+        <th>نام خانوادگی صاحب حساب:</th>
+        <th>کد ملی صاحب حساب:</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (account of accountsData; track account.accountId) {
+          <tr>
+            <td>{{ account.accountId }}</td>
+            <td>{{ account.cardId }}</td>
+            <td>{{ account.iban }}</td>
+            <td>{{ account.accountType }}</td>
+            <td>{{ account.branchTelephone }}</td>
+            <td>{{ account.branchAddress }}</td>
+            <td>{{ account.branchName }}</td>
+            <td>{{ account.ownerName }}</td>
+            <td>{{ account.ownerLastName }}</td>
+            <td>{{ account.ownerId }}</td>
           </tr>
         } @empty {
           <h4>هیچ داده ای برای نمایش یافت نشد.</h4>
@@ -52,6 +116,7 @@
   <ul>
     <li (click)="handleShowUser()" data-trigger-button>نمایش کاربر</li>
     <li (click)="handleExpandGraph()">گسترش تراکنش ها</li>
+    <li (click)="handleDeleteNode()">حذف کردن راس</li>
   </ul>
 </div>
 

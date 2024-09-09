@@ -12,10 +12,36 @@
     @apply hidden;
   }
   .input-label {
-    @apply cursor-pointer p-2;
+    @apply cursor-pointer p-2 font-bold;
+    color: $secondary-color;
 
     &:hover {
-      @apply border-b border-b-black
+      @apply border-b;
+      border-color: $secondary-color;
+    }
+  }
+  .dropdown {
+    @apply relative;
+  }
+  .dropdown-content {
+    @apply hidden absolute text-[2rem] rounded-3xl p-3 z-20;
+    background-color: $primary-color;
+    color: $bg-color;
+
+    inline-size: 30rem;
+
+    inset-block-start: 5.5rem;
+    inset-inline-start: -0.05rem;
+  }
+  .dropdown-element {
+    @apply flex flex-row justify-between items-center select-none hover:cursor-pointer;
+
+    button:last-child {
+      color: $error-color;
+    }
+
+    button:first-child {
+      color: $bg-color;
     }
   }
   .form-button {
@@ -36,6 +62,15 @@
       }
     }
   }
+  .danger {
+    border-color: $error-color !important;
+    color: $error-color !important;
+
+    &:hover {
+      background-color: $error-color !important;
+      color: $bg-color !important;
+    }
+  }
   .select-group {
     @apply focus:outline-none p-2 rounded-2xl;
     background-color: $bg-color;
@@ -53,6 +88,13 @@
       color: $bg-color;
     }
   }
+  .account-table {
+    inline-size: 120rem !important;
+    block-size: 80rem !important;
+
+    inset-block-start: calc(50vh - 40rem) !important;
+    inset-inline-start: calc(50vw - 60rem) !important;
+  }
   .table-container {
     @apply absolute p-6 justify-center items-center rounded-2xl hidden text-[1.5rem] overflow-auto z-20;
     background-color: $primary-color;
@@ -64,23 +106,26 @@
     inset-block-start: calc(50vh - 25rem);
     inset-inline-start: calc(50vw - 35rem);
 
+
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-gutter: stable;
     scrollbar-color: $bg-color $primary-color;
-  }
-  .table {
-    @apply border-separate border-spacing-4 table-auto mt-10;
 
-    thead {
-      @apply top-0 sticky;
-      background-color: $bg-color;
-      color: black;
-    }
+    .table {
+      @apply border-separate border-spacing-4 table-auto mt-10 block;
+      max-block-size: 100%;
 
-    td, th {
-      @apply border-b p-1;
-      border-color: $bg-color;
+      thead {
+        @apply top-0 sticky;
+        background-color: $bg-color;
+        color: black;
+      }
+
+      td, th {
+        @apply border-b p-1;
+        border-color: $bg-color;
+      }
     }
   }
   .form-search-user {

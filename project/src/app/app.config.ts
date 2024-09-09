@@ -4,13 +4,19 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import {provideHttpClient, withFetch} from "@angular/common/http";
+import {provideAnimations} from "@angular/platform-browser/animations";
+import {provideToastr} from "ngx-toastr";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
-    provideHttpClient(withFetch())],
+    provideHttpClient(withFetch()),
+    provideAnimations(),
+    provideToastr()
+  ],
 };
 
-export const API_BASE_URL: string = 'https://mybackend.abriment.com/';
+export const API_BASE_URL = 'http://external.abriment.com:30080/';
+

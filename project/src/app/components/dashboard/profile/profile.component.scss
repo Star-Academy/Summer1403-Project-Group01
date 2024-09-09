@@ -1,33 +1,103 @@
 @import '../../../../variables';
 @layer components {
   .profile {
-    @apply p-12 rounded-3xl flex flex-col items-center gap-12;
-    background: $secondary-color;
+    @apply rounded-3xl flex items-center;
+    background: $primary-color;
     color: #fdfdfd;
     border-radius: 20px;
     margin-inline: 50px;
-    height: 90vh;
+    height: 70vh;
   }
-  .profile-name {
-    @apply text-[8rem];
-    letter-spacing: 0.35rem;
+  .right{
+    width: 30%;
+    height: 100%;
+    background-color: $bg-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid $primary-color;
+    border-radius:0 20px 20px 0 ;
+    svg{
+      width: 80%;
+    }
+  
   }
-  .profile-username {
-    @apply text-[7rem];
-    letter-spacing: 0.3rem;
-  }
-  .profile-email {
-    @apply text-[6rem];
-  }
-  .profile-role-container {
-    @apply flex flex-row justify-around items-center gap-[1rem] self-stretch;
+  .left{
+    width: 70%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr 2fr;
+    .main-profile{
+      width: 70%;
+      justify-self: center;
+      align-self: center;
+    }
+    ul{
+      display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+    }
 
+  }
+
+  .profile-role-container {
+    @apply flex flex-row justify-start items-center gap-[1rem] self-stretch;
+    width: 70%;
+    justify-self: center;
     ng-icon {
-      @apply w-[3rem] h-[3rem] ms-auto;
+      @apply w-[3rem] h-[3rem] ;
     }
 
     p {
-      @apply text-[3rem]
+      @apply text-[1.5rem]
     }
   }
+  .navbar-list {
+    @apply flex flex-col justify-start  gap-[20px] p-[1.5rem] w-full self-center ;
+  }
+  ul{
+  .navbar-item {
+    @apply text-[2rem] hover:cursor-pointer transition-all delay-75 ease-in-out  rounded-2xl;
+    color: $secondary-color;
+    background-color: $primary-color;
+    border: 3px solid $secondary-color;
+    height: 40%;
+    width: 19rem  ;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition-duration: 0.3s;
+    &:hover {
+      color: $bg-color;
+      background: $secondary-color;
+    }
+    &:focus {
+      background: $secondary-color;
+      color: $bg-color;  
+      &:hover {
+        color: $bg-color
+      }
+    }
+  }
+  .active {
+    background: $secondary-color;
+    color: $bg-color;
+    
+    &:hover {
+      color: $bg-color
+    }
+  }
+  .ex {
+    border: 3px solid $error-color;
+   color:  $error-color; 
+   &:hover {
+    background: $error-color;
+    color: $bg-color
+  }
+  }
+}
 }
