@@ -42,13 +42,9 @@ export class EditProfileComponent {
         userName: this.formGroup.value.userName || this.userService.getUser()?.userName
       }
       this.modifyService.modifyUser(data);
-      this.router.navigate(['dashboard/profile']);
+      this.router.navigate(['dashboard/profile/main']);
     } else {
       this.toast.error("اشکالی در ورودی های شما وجود دارد.")
     }
-  }
-
-  handleClose(): void {
-    this.router.navigateByUrl('dashboard/profile')
   }
 }

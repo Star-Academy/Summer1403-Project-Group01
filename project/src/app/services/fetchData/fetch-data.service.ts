@@ -14,7 +14,8 @@ export class FetchDataService {
 
   fetchData(): Promise<Transaction[]> {
     const token = this.getToken();
-    return firstValueFrom(this.http.get<Transaction[]>(API_BASE_URL + 'transactions', {headers: {'Authorization': "Bearer " + token}}))
+    return firstValueFrom(this.http.get<Transaction[]>(API_BASE_URL + 'transactions',
+      {headers: {'Authorization': "Bearer " + token}}))
   }
 
   fetchDataById(accountId: string): Promise<AccountTransaction[]> {

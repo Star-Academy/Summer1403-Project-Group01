@@ -9,6 +9,7 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {UserService} from "../../../services/user/user.service";
 import {Router} from "@angular/router";
 import {BlurClickDirective} from "../../../directives/blur-click.directive";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-manage-users',
@@ -35,7 +36,7 @@ export class ManageUsersComponent {
   @ViewChild('searchElement') searchElement!: ElementRef<HTMLInputElement>;
 
   constructor(private modifyService: ModifyUserService, private http: HttpClient, private userService: UserService,
-    private router: Router) {}
+    private router: Router, private toast: ToastrService) {}
 
   ngOnInit(): void {
     const token = this.getToken();
@@ -83,13 +84,24 @@ export class ManageUsersComponent {
         role: this.formGroup.value.role,
       }
       const token = this.getToken();
-      this.http.post<User>(API_BASE_URL + 'users/signup', data, {headers: {'Authorization': "Bearer " + token}})
-        .subscribe((res) => {
-          this.finalUsers?.push(res);
-          this.handleClose();
+      this.http.post<User>(API_BASE_URL + 'users/signup', data,
+        {headers: {'Authorization': "Bearer " + token, "Accept": "application/json"}})
+        .subscribe({
+          next: (res) => {
+            this.finalUsers?.push(res);
+            this.handleClose();
+          },
+          error: (error) => {
+            if (error.status === 401) {
+              this.userService.logout();
+              this.toast.error("لطفا مجددا وارد شوید.")
+            } else {
+              this.toast.error("مشکلی در ساخت کاربر به وجود امد.")
+            }
+          }
         });
     } else {
-      console.log(this.formGroup.value);
+      this.toast.error("مقادیر فرم قابل قبول نیست.")
     }
   }
 

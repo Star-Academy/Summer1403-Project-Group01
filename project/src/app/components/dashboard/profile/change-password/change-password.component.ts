@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import { heroXMark } from '@ng-icons/heroicons/outline';
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-change-password',
@@ -25,7 +26,8 @@ export class ChangePasswordComponent {
       Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\W).+')]),
   });
 
-  constructor(private modifyService: ModifyUserService, private router: Router) {}
+  constructor(private modifyService: ModifyUserService,
+              private router: Router, private toast: ToastrService) {}
 
   onSubmit(): void {
     if (this.formGroup.valid && this.formGroup.value.newPassword === this.formGroup.value.confirmPassword) {
@@ -35,13 +37,9 @@ export class ChangePasswordComponent {
         newPassword: this.formGroup.value.newPassword
       }
       this.modifyService.changePassword(data);
-      this.router.navigate(['dashboard/profile'])
+      this.router.navigate(['dashboard/profile/main'])
     } else {
-      alert("مشکلی در ورودی های شما وجود دارد.")
+      this.toast.error("های شما وجود دارد.")
     }
-  }
-
-  handleClose(): void {
-    this.router.navigateByUrl('dashboard/profile')
   }
 }

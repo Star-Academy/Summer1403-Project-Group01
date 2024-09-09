@@ -4,13 +4,15 @@ import {HttpClient} from "@angular/common/http";
 import {API_BASE_URL} from "../../app.config";
 import {Router} from "@angular/router";
 import {isPlatformBrowser} from "@angular/common";
+import {ToastrService} from "ngx-toastr";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   private user: User | undefined = undefined;
-  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platform: object) {
+  constructor(private http: HttpClient, private router: Router,
+              @Inject(PLATFORM_ID) private platform: object, private toast: ToastrService) {
     if (isPlatformBrowser(this.platform)) {
       const u = localStorage.getItem('userData');
       if (u) {
@@ -36,20 +38,30 @@ export class UserService {
       username: user.identifier.includes('@') ? null : user.identifier,
       password: user.password,
     }
-    this.http.post(`${API_BASE_URL}users/login`, obj).subscribe((res: any) => {
-      this.user = {};
-      this.user.userName = res?.username;
-      localStorage.setItem('token', JSON.stringify(res?.token));
-      const userData = {
-        firstName: res.firstName,
-        lastName: res.lastName,
-        email: res.email,
-        userName: res.userName,
-        role: res.role,
-      };
-      this.user = userData;
-      localStorage.setItem("userData", JSON.stringify(userData));
-      this.router.navigate(['dashboard/profile']);
+    this.http.post(`${API_BASE_URL}users/login`, obj).subscribe({
+      next: (res: any) => {
+        this.user = {};
+        this.user.userName = res?.username;
+        localStorage.setItem('token', JSON.stringify(res?.token));
+        const userData = {
+          firstName: res.firstName,
+          lastName: res.lastName,
+          email: res.email,
+          userName: res.userName,
+          role: res.role,
+        };
+        this.user = userData;
+        localStorage.setItem("userData", JSON.stringify(userData));
+        this.router.navigate(['dashboard/profile']);
+        this.toast.success("با موفقیت وارد شدید.")
+      },
+      error: (error) => {
+        if (error.error.message[0].includes("Invalid")) {
+          this.toast.error("نام کاربری/ایمیل اشتباه است.")
+        } else if (error.error.message[0].includes("incorrect")) {
+          this.toast.error("کاربر وجود ندارد و یا رمز عبور اشتباه است.")
+        }
+      }
     });
   }
 
