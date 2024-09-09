@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import { heroXMark } from '@ng-icons/heroicons/outline';
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-edit-profile',
@@ -22,7 +23,8 @@ import { heroXMark } from '@ng-icons/heroicons/outline';
 export class EditProfileComponent {
   formGroup!: FormGroup;
 
-  constructor(private userService: UserService, private modifyService: ModifyUserService, private router: Router) {
+  constructor(private userService: UserService, private modifyService: ModifyUserService,
+              private router: Router, private toast: ToastrService) {
     const user = this.userService.getUser();
 
     this.formGroup = new FormGroup({
@@ -42,7 +44,7 @@ export class EditProfileComponent {
       this.modifyService.modifyUser(data);
       this.router.navigate(['dashboard/profile']);
     } else {
-      alert("اشکالی در ورودی های شما وجود دارد.")
+      this.toast.error("اشکالی در ورودی های شما وجود دارد.")
     }
   }
 
