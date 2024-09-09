@@ -1,10 +1,11 @@
 export interface Transaction {
-  TransactionId: number,
+  transactionId: number,
   sourceAccountId: number,
   destinationAccountId: number,
   amount: number,
   date: string,
-  type: string
+  type: string,
+  trackingId: number,
 }
 
 export interface Node {
@@ -25,6 +26,7 @@ export interface Link {
   date: string;
   amount: string;
   type: string;
+  totalLinks?: number;
 }
 
 export interface Account {

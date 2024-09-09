@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, HostListener, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {UserService} from "../../../services/user/user.service";
 import User from "../../../interfaces/user";
 import {FormsModule} from "@angular/forms";
@@ -6,12 +6,13 @@ import {HttpClient} from "@angular/common/http";
 import {API_BASE_URL} from "../../../app.config";
 import {RialPipePipe} from "./pipes/rial-pipe.pipe";
 import {PersianDatePipe} from "./pipes/persian-date.pipe";
-import {heroXMark} from "@ng-icons/heroicons/outline";
+import {heroXMark, heroChevronDown} from "@ng-icons/heroicons/outline";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import {BlurClickDirective} from "../../../directives/blur-click.directive";
 import * as d3 from 'd3';
 import {FetchDataService} from "../../../services/fetchData/fetch-data.service";
 import {Account, Link, Transaction, Node} from "../../../interfaces/other";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-show-data',
@@ -25,15 +26,18 @@ import {Account, Link, Transaction, Node} from "../../../interfaces/other";
   ],
   templateUrl: './show-data.component.html',
   styleUrl: './show-data.component.scss',
-  providers: [provideIcons({heroXMark})]
+  providers: [provideIcons({heroXMark, heroChevronDown})]
 })
 export class ShowDataComponent {
   user!: User | undefined;
   data: Transaction[] | undefined = undefined;
+  accountsData: Account[] | undefined = undefined;
   nodes: Node[] = [];
   links: Link[] = [];
   account: Account | undefined = undefined;
   graphRendered = false;
+  lastId = 1;
+  fileIds: {id: number}[] = [];
 
   element!: d3.Selection<SVGSVGElement, unknown, null, undefined>;
   svgGroup!: d3.Selection<SVGGElement, unknown, null, undefined>;
@@ -45,29 +49,46 @@ export class ShowDataComponent {
   node!: d3.Selection<SVGCircleElement, Node, SVGGElement, unknown>;
   nodeLabels!: d3.Selection<SVGTextElement, Node, SVGGElement, unknown>;
 
-  @Output() dataGotEvent = new EventEmitter<string>();
-
-  @ViewChild('labelElement') labelElement!: ElementRef<HTMLLabelElement>;
-  @ViewChild('inputElement') inputElement!: ElementRef<HTMLInputElement>;
+  @ViewChild('labelAccountsElement') labelAccountsElement!: ElementRef<HTMLLabelElement>;
+  @ViewChild('labelTransactionsElement') labelTransactionsElement!: ElementRef<HTMLLabelElement>;
+  @ViewChild('inputAccountsElement') inputAccountsElement!: ElementRef<HTMLInputElement>;
+  @ViewChild('inputTransactionsElement') inputTransactionsElement!: ElementRef<HTMLInputElement>;
   @ViewChild('selectElement') selectElement!: ElementRef<HTMLSelectElement>;
   @ViewChild('dataElement') dataElement!: ElementRef<HTMLDivElement>;
   @ViewChild('graphElement') graphElement!: ElementRef<HTMLDivElement>;
   @ViewChild('contextElement') contextElement!: ElementRef<HTMLDivElement>;
   @ViewChild('searchIdElement') searchIdElement!: ElementRef<HTMLInputElement>;
   @ViewChild('userContainer') userElement!: ElementRef<HTMLDivElement>;
+  @ViewChild('accountDataElement') accountDataElement!: ElementRef<HTMLDivElement>;
+  @ViewChild('filesElement') filesElement!: ElementRef<HTMLUListElement>;
 
-  constructor(private userService: UserService, private http: HttpClient, private fetchDataService: FetchDataService) {
+  constructor(private userService: UserService, private http: HttpClient,
+              private fetchDataService: FetchDataService, private toast: ToastrService) {
     this.user = this.userService.getUser();
   }
 
   handleChange(): void {
-    if (this?.inputElement?.nativeElement?.files && this?.inputElement?.nativeElement?.files?.length > 0) {
-      this.labelElement.nativeElement.textContent = this?.inputElement?.nativeElement?.files[0].name;
+    if (this?.inputAccountsElement?.nativeElement?.files && this?.inputAccountsElement?.nativeElement?.files?.length > 0) {
+      this.labelAccountsElement.nativeElement.textContent = this?.inputAccountsElement?.nativeElement?.files[0].name;
+    }
+    if (this?.inputTransactionsElement?.nativeElement?.files && this?.inputTransactionsElement?.nativeElement?.files?.length > 0) {
+      this.labelTransactionsElement.nativeElement.textContent = this?.inputTransactionsElement?.nativeElement?.files[0].name;
     }
   }
 
   handleDisabled(): boolean {
-    return !(this?.inputElement?.nativeElement?.files && this?.inputElement?.nativeElement?.files?.length > 0);
+    return (
+      !(this?.inputAccountsElement?.nativeElement?.files && this?.inputAccountsElement?.nativeElement?.files?.length > 0)
+      || !(this?.inputTransactionsElement?.nativeElement?.files && this?.inputTransactionsElement?.nativeElement?.files?.length > 0)
+    );
+  }
+
+  handleShowFiles(): void {
+    this.filesElement.nativeElement.style.display = 'block';
+  }
+
+  closeShowFiles(): void {
+    this.filesElement.nativeElement.style.display = 'none';
   }
 
   clearGraphTable(): void {
@@ -77,7 +98,6 @@ export class ShowDataComponent {
   async handleGetUser() {
     this.nodes = [];
     this.links = [];
-    this.clearGraphTable();
     if (this.searchIdElement.nativeElement.value === '') {
       await this.getAllData();
       return;
@@ -117,33 +137,131 @@ export class ShowDataComponent {
       })
     }
     this.searchIdElement.nativeElement.value = "";
-    this.dataGotEvent.emit("none-all");
+    this.handleGraph();
   }
 
   onSubmit(): void {
-    const formData: FormData = new FormData();
+    const formDataAccount: FormData = new FormData();
+    const formDataTransaction: FormData = new FormData();
     const token: string | null = this.getToken();
-    if (this.inputElement.nativeElement.files) {
-      const file = this.inputElement.nativeElement.files[0];
-      formData.append('file', file);
-      if (this.selectElement.nativeElement.value === "transaction") {
-        this.http.post(API_BASE_URL + 'transactions/upload', formData, {headers: {"Authorization": "Bearer " + token}}).subscribe((response) => {
-          console.log(response);
-        })
-      } else if (this.selectElement.nativeElement.value === "account") {
-        this.http.post(API_BASE_URL + 'accounts/upload', formData, {headers: {"Authorization": "Bearer " + token}}).subscribe((response) => {
-          console.log(response);
-        })
-      }
+    if (this.inputAccountsElement.nativeElement.files && this.inputTransactionsElement.nativeElement.files) {
+      const accountFile = this.inputAccountsElement.nativeElement.files[0];
+      const transactionFile = this.inputTransactionsElement.nativeElement.files[0];
+      formDataAccount.append('file', accountFile);
+      formDataAccount.append('fileId', String(this.lastId))
+      formDataTransaction.append('file', transactionFile);
+      formDataTransaction.append('fileId', String(this.lastId))
+      this.http.post(API_BASE_URL + 'accounts/upload', formDataAccount,
+        {headers: {"Authorization": "Bearer " + token, "Accept": "application/json"}})
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            this.http.post(API_BASE_URL + 'transactions/upload', formDataTransaction,
+              {headers: {"Authorization": "Bearer " + token, "Accept": "application/json"}})
+              .subscribe({
+                next: () => {
+                  this.lastId++;
+                  this.getAllFileIds();
+                  this.getAccountsData();
+                  this.getAllData();
+                  this.toast.success("فایل ها با موفقیت اپلود شدند.");
+                }
+              });
+            },
+          error: (error) => {
+            if (error.status === 401) {
+              this.userService.logout();
+              this.toast.error("لطفا مجددا وارد شوید.")
+            } else {
+              this.toast.error("فایل تکراری است.")
+            }
+          },
+        });
     }
   }
 
-  showData(): void {
-    this.dataElement.nativeElement.style.display = 'flex';
+  handleDeleteFile(event: MouseEvent) {
+    const token = this.getToken();
+    this.http.delete(API_BASE_URL + 'transactions/' + (event.target as HTMLElement).id,
+      {headers: {"Authorization": "Bearer " + token, "Accept": "application/json"}}).subscribe({
+      next: () => {
+        this.http.delete(API_BASE_URL + 'accounts/' + (event.target as HTMLElement).id,
+          {headers: {"Authorization": "Bearer " + token, "Accept": "application/json"}}).subscribe({
+          next: () => {
+            this.fileIds = this.fileIds?.filter(fileId => fileId.id !== Number((event.target as HTMLElement).id));
+            this.getAccountsData();
+            this.getAllData();
+            this.handleGraph();
+          },
+          error: (error) => {
+            if (error.status === 401) {
+              this.userService.logout();
+              this.toast.error("لطفا مجددا وارد شوید.");
+            } else {
+              this.toast.error("در اپلود فایل مشکلی به وجود امد.")
+            }
+          }
+        })
+      }
+    })
   }
 
-  handleClose(): void {
-    this.dataElement.nativeElement.style.display = 'none';
+  handleUpdateFileData(event: MouseEvent) {
+    const token = this.getToken();
+    const id = (event.target as HTMLElement).id;
+    this.http.get<Account[]>(API_BASE_URL + 'accounts/by-file-id/' + id,
+      { headers: { 'Authorization': "Bearer " + token } }).subscribe((response) => {
+        this.accountsData = response;
+    });
+    this.http.get<Transaction[]>(API_BASE_URL + 'transactions/by-file-id/' + id,
+      { headers: { 'Authorization': "Bearer " + token } }).subscribe((response) => {
+        this.data = response;
+        this.nodes = [];
+        this.links = [];
+        for (const trans of response) {
+          if (!this.nodes.find(node => node.label === trans.sourceAccountId)) {
+            this.nodes.push({
+              x: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].x + 1 : 1,
+              y: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].y + 1 : 1,
+              vx: 1,
+              vy: 1,
+              label: trans.sourceAccountId,
+            });
+          }
+          if (!this.nodes.find(node => node.label === trans.destinationAccountId)) {
+            this.nodes.push({
+              x: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].x + 1 : 1,
+              y: this.nodes[this.nodes.length - 1] ? this.nodes[this.nodes.length - 1].y + 1 : 1,
+              vx: 1,
+              vy: 1,
+              label: trans.destinationAccountId,
+            });
+          }
+          this.links.push({
+            source: this.nodes.find(node => node.label === trans.sourceAccountId)!,
+            target: this.nodes.find(node => node.label === trans.destinationAccountId)!,
+            date: (new PersianDatePipe()).transform(trans.date),
+            type: trans.type,
+            amount: (new RialPipePipe()).transform(trans.amount),
+          });
+        }
+    });
+  }
+
+  showData(whichData: string): void {
+    if (whichData === "transactions") {
+      this.dataElement.nativeElement.style.display = 'flex';
+    } else {
+      this.accountDataElement.nativeElement.style.display = 'flex';
+    }
+  }
+
+  handleClose(whichData: string): void {
+    if (whichData === "accounts") {
+      this.accountDataElement.nativeElement.style.display = 'none';
+    } else {
+      this.dataElement.nativeElement.style.display = 'none';
+    }
   }
 
   getToken(): string | null {
@@ -156,12 +274,31 @@ export class ShowDataComponent {
   }
 
   async ngOnInit() {
-    await this.getAllData();
+      this.getAllFileIds();
+      this.getAccountsData();
+      await this.getAllData();
+  }
+
+  getAccountsData(): void {
+    const token = this.getToken();
+    this.http.get<Account[]>(API_BASE_URL + 'accounts', { headers: { 'Authorization': "Bearer " + token } })
+      .subscribe((res) => { this.accountsData = res; })
+  }
+
+  getAllFileIds(): void {
+    const token = this.getToken();
+    this.http.get<{id: number}[]>(API_BASE_URL + 'file-ids', { headers: { 'Authorization': "Bearer " + token } })
+      .subscribe((res) => {
+        this.fileIds = res;
+        this.lastId = this.fileIds[this.fileIds.length - 1].id + 1;
+      });
   }
 
   async getAllData(): Promise<void> {
     const response = await this.fetchDataService.fetchData();
     this.data = response;
+    this.nodes = [];
+    this.links = [];
     for (const trans of response) {
       if (!this.nodes.find(node => node.label === trans.sourceAccountId)) {
         this.nodes.push({
@@ -189,13 +326,16 @@ export class ShowDataComponent {
         amount: (new RialPipePipe()).transform(trans.amount),
       });
     }
-    this.dataGotEvent.emit("all");
   }
 
-  @HostListener('dataGotEvent', ['$event'])
-  handleGraph(callType: string): void {
+  handleGraph(): void {
+    this.clearGraphTable();
     this.graphRendered = false;
     this.graphElement.nativeElement.textContent = "";
+    if (this.nodes.length === 0) {
+      this.graphElement.nativeElement.textContent = "داده ای یافت نشد!";
+      return;
+    }
     this.element = d3.select(this.graphElement.nativeElement)
       .append('svg')
       .attr('width', this.graphElement.nativeElement.clientWidth)
@@ -249,8 +389,8 @@ export class ShowDataComponent {
       .append('line')
       .attr('stroke-width', 2)
       .attr('stroke', '#FDFDFD')
+      .attr('fill', 'none')
       .attr('marker-end', 'url(#arrowhead)');
-
 
     this.linkLabelsAmount = this.svgGroup.append('g')
       .attr('class', 'link-labels')
@@ -325,13 +465,10 @@ export class ShowDataComponent {
       this.contextElement.nativeElement.style.top = event.clientY + 'px';
       this.contextElement.nativeElement.style.left = event.clientX + 'px';
 
-      const expandButton = this.contextElement.nativeElement.querySelector('ul > li:last-child');
+      const expandButton = this.contextElement.nativeElement.querySelector('ul > li:nth-child(2)');
+      const deleteButton = this.contextElement.nativeElement.querySelector('ul > li:last-child');
       expandButton?.classList.add("disabled");
-      if (callType === "all") {
-        expandButton?.setAttribute("style", "display: none;");
-      } else {
-        expandButton?.setAttribute("style", "display: block;");
-      }
+      deleteButton?.classList.add("disabled");
     });
 
     this.nodeLabels = this.svgGroup.append('g')
@@ -341,28 +478,26 @@ export class ShowDataComponent {
       .enter()
       .append('text')
       .attr('text-anchor', 'middle')
-      .attr('dy', -10) // Position above the node
+      .attr('dy', -10)
       .attr('fill', '#172535')
       .attr('style', 'user-select: none;font-weight:bold;font-size:1.5rem;')
       .text((d: Node) => d.label ? d.label : "");
 
     this.simulation.on('tick', () => {
       this.link
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
+        .attr('x1', (d: Link) => d.source.x)
+        .attr('y1', (d: Link) => d.source.y)
+        .attr('x2', (d: Link) => d.target.x)
+        .attr('y2', (d: Link) => d.target.y);
 
       this.node
         .attr('cx', d => d.x)
         .attr('cy', d => d.y);
 
-      // Update positions of node labels
       this.nodeLabels
         .attr('x', d => d.x)
         .attr('y', d => d.y);
 
-      // Update positions of link labels
       this.linkLabelsAmount
         .attr('x', d => ((d.source as Node).x + (d.target as Node).x) / 2)
         .attr('y', d => ((d.source as Node).y + (d.target as Node).y) / 2);
@@ -382,8 +517,10 @@ export class ShowDataComponent {
       .force('center', d3.forceCenter(this.graphElement.nativeElement.clientWidth / 2, this.graphElement.nativeElement.clientHeight / 2))
       .on("end", () => {
         this.graphRendered = true;
-        const expandButton = this.contextElement.nativeElement.querySelector('ul > li:last-child');
+        const expandButton = this.contextElement.nativeElement.querySelector('ul > li:nth-child(2)');
         expandButton?.classList.remove("disabled");
+        const deleteButton = this.contextElement.nativeElement.querySelector('ul > li:last-child');
+        deleteButton?.classList.remove("disabled");
       });
 
   }
@@ -431,6 +568,15 @@ export class ShowDataComponent {
         });
       }
     }
-    this.dataGotEvent.emit("none-all");
+    this.handleGraph();
+  }
+
+  handleDeleteNode(): void {
+    if (!this.graphRendered) return;
+    this.nodes = this.nodes.filter(node => node.label !== this.account?.accountId);
+    this.links = this.links.filter(link => (link.source.label !== this.account?.accountId)
+      && (link.target.label !== this.account?.accountId));
+    this.contextElement.nativeElement.style.display = 'none';
+    this.handleGraph();
   }
 }

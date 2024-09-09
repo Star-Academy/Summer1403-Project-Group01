@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
-import {NavbarComponent} from "./navbar/navbar.component";
-import {ActivatedRoute, RouterOutlet} from "@angular/router";
+import {NavbarComponent} from "../navbar/navbar.component";
+import {ActivatedRoute, provideRouter, RouterOutlet} from "@angular/router";
 import {NgIconComponent, provideIcons} from "@ng-icons/core";
 import {NgClass} from "@angular/common";
 import {BgGifComponent} from "../bg-gif/bg-gif.component";
@@ -22,7 +22,9 @@ describe('DashboardComponent', () => {
         NgClass,
         BgGifComponent
       ],
-      providers: [provideIcons({heroBars3, heroArrowUturnRight}), provideHttpClient(), {provide: ActivatedRoute, useValue: 'dashboard/profile' }],
+      providers: [provideIcons({heroBars3, heroArrowUturnRight}), provideHttpClient(),
+        {provide: ActivatedRoute, useValue: 'dashboard/profile'}
+      ],
     })
     .compileComponents();
 
